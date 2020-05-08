@@ -1,5 +1,5 @@
-# cpp-class-SET
-离散作业<br>
+cpp-class-SET
+=============
 A class named SET can storage of data mixed<br>
 //包含两个类：SET（集合）、ordinal_pair（序偶）<br>
 //支持的数据类型：int,char,string,SET,ordinal_pair<br>
@@ -11,3 +11,6 @@ A class named SET can storage of data mixed<br>
 // Support mixed storage of different types of data<br>
 // Supported operations: intersection (&&), union (+), difference (-), symmetric difference (Symmetrical_difference (SET 1, SET2)), power set (SET.power ()), Cartesian product (* )<br>
 // Support output stream << operation, you can directly output the result with cout<br>
+<font color=#A9A9A9 size=1 >离散作业</font><br>
+<br>
+[My blog](https://hwzen.myds.me:17001 "变态文春の又一个博客")<br>
