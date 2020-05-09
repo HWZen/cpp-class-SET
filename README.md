@@ -11,8 +11,7 @@ A class named SET can storage of data mixed<br>
 // Support mixed storage of different types of data<br>
 // Supported operations: intersection (&&), union (+), difference (-), symmetric difference (Symmetrical_difference (SET 1, SET2)), power set (SET.power ()), Cartesian product (* )<br>
 // Support output stream << operation, you can directly output the result with cout<br>
-<font color=#A9A9A9 size=1 >离散作业</font><br>
-<br>
+>项目源自离散作业<br>
 
 ## 5月10日更新
 ### ordinal_pair（序偶）类更新
