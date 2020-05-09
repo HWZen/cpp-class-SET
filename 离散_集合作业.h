@@ -19,34 +19,20 @@ enum types//枚举类型定义声明
 class ordinal_pair
 {
 public:
-	/*************构造函数（5*5+2重载）****************/
+	/*************构造函数（5重载）****************/
+	/**********5月10日，开始用模板代替重载*********/
 	ordinal_pair();
+
+	template <typename T2>
+	ordinal_pair(const char *chs, T2 t2);
+
+	template <typename T1>
+	ordinal_pair(T1 t1, const char *chs);
+
+	template <typename T1, typename T2>
+	ordinal_pair(T1 t1, T2 t2);
+
 	ordinal_pair(const ordinal_pair& op);
-	ordinal_pair(int t1, int t2);
-	ordinal_pair(int t1, char t2);
-	ordinal_pair(int t1, string t2);
-	ordinal_pair(int t1, SET t2);
-	ordinal_pair(int t1, ordinal_pair t2);
-	ordinal_pair(char t1, int t2);
-	ordinal_pair(char t1, char t2);
-	ordinal_pair(char t1, string t2);
-	ordinal_pair(char t1, SET t2);
-	ordinal_pair(char t1, ordinal_pair t2);
-	ordinal_pair(string t1, int t2);
-	ordinal_pair(string t1, char t2);
-	ordinal_pair(string t1, string t2);
-	ordinal_pair(string t1, SET t2);
-	ordinal_pair(string t1, ordinal_pair t2);
-	ordinal_pair(SET t1, int t2);
-	ordinal_pair(SET t1, char t2);
-	ordinal_pair(SET t1, string t2);
-	ordinal_pair(SET t1, SET t2);
-	ordinal_pair(SET t1, ordinal_pair t2);
-	ordinal_pair(ordinal_pair t1, int t2);
-	ordinal_pair(ordinal_pair t1, char t2);
-	ordinal_pair(ordinal_pair t1, string t2);
-	ordinal_pair(ordinal_pair t1, SET t2);
-	ordinal_pair(ordinal_pair t1, ordinal_pair t2);
 
 	void operator=(const ordinal_pair& op);//重载赋值运算
 	~ordinal_pair();//析构函数
@@ -72,11 +58,13 @@ private:
 	enum types type1,type2;//第一、第二变量类型
 
 	/********储存分量数据，允许int,char,string,SET和序偶类型作为分量*******/
-	int I[2];
-	char CH[2];
-	string STR[2];
+	/*******************5月10日，全部数据用指针代替常量********************/
+	int * I[2];
+	char * CH[2];
+	string * STR[2];
 	SET * SETT[2];
 	ordinal_pair * OP[2];
+	
 
 };
 
@@ -147,13 +135,19 @@ void ordinal_pair::operator=(const ordinal_pair & op)
 	switch (type1)
 	{
 	case Int:
-		I[0] = op.I[0];
+		delete I[0];
+		I[0] = new int;
+		*I[0] = *op.I[0];
 		break;
 	case Char:
-		CH[0] = op.CH[0];
+		delete CH[0];
+		CH[0] = new char;
+		*CH[0] = *op.CH[0];
 		break;
 	case Str:
-		STR[0] = op.STR[0];
+		delete STR[0];
+		STR[0] = new string;
+		*STR[0] = *op.STR[0];
 		break;
 	case Set:
 		delete SETT[0];
@@ -173,13 +167,19 @@ void ordinal_pair::operator=(const ordinal_pair & op)
 	switch (type2)
 	{
 	case Int:
-		I[1] = op.I[1];
+		delete I[1];
+		I[1] = new int;
+		*I[1] = *op.I[1];
 		break;
 	case Char:
-		CH[1] = op.CH[1];
+		delete CH[1];
+		CH[1] = new char;
+		*CH[1] = *op.CH[1];
 		break;
 	case Str:
-		STR[1] = op.STR[1];
+		delete STR[1];
+		STR[1] = new string;
+		*STR[1] = *op.STR[1];
 		break;
 	case Set:
 		delete SETT[1];
@@ -203,6 +203,12 @@ ordinal_pair::ordinal_pair()
 {
 	type1 = null;
 	type2 = null;
+	I[0] = NULL;
+	I[1] = NULL;
+	CH[0] = NULL;
+	CH[1] = NULL;
+	STR[0] = NULL;
+	STR[1] = NULL;
 	SETT[0] = NULL;
 	SETT[1] = NULL;
 	OP[0] = NULL;
@@ -219,26 +225,48 @@ inline ordinal_pair::~ordinal_pair()
 		delete OP[0]; OP[0] = NULL;
 	if (OP[1] != NULL)
 		delete OP[1]; OP[1] = NULL;
+	delete I[0];
+	delete I[1];
+	delete CH[0];
+	delete CH[1];
+	delete STR[0];
+	delete STR[1];
+	I[0] = NULL;
+	I[1] = NULL;
+	CH[0] = NULL;
+	CH[1] = NULL;
+	STR[0] = NULL;
+	STR[1] = NULL;
 }
 
 ordinal_pair::ordinal_pair(const ordinal_pair & op)
 {
 	type1 = op.type1;
 	type2 = op.type2;
+	I[0] = NULL;
+	I[1] = NULL;
+	CH[0] = NULL;
+	CH[1] = NULL;
+	STR[0] = NULL;
+	STR[1] = NULL;
 	SETT[0] = NULL;
 	SETT[1] = NULL;
 	OP[0] = NULL;
 	OP[1] = NULL;
+
 	switch (type1)
 	{
 	case Int:
-		I[0] = op.I[0];
+		I[0] = new int;
+		*I[0] = *op.I[0];
 		break;
 	case Char:
-		CH[0] = op.CH[0];
+		CH[0] = new char;
+		*CH[0] = *op.CH[0];
 		break;
 	case Str:
-		STR[0] = op.STR[0];
+		STR[0] = new string;
+		*STR[0] = *op.STR[0];
 		break;
 	case Set:
 		SETT[0] = new SET;
@@ -256,13 +284,16 @@ ordinal_pair::ordinal_pair(const ordinal_pair & op)
 	switch (type2)
 	{
 	case Int:
-		I[1] = op.I[1];
+		I[1] = new int;
+		*I[1] = *op.I[1];
 		break;
 	case Char:
-		CH[1] = op.CH[1];
+		CH[1] = new char;
+		*CH[1] = *op.CH[1];
 		break;
 	case Str:
-		STR[1] = op.STR[1];
+		STR[1] = new string;
+		*STR[1] = *op.STR[1];
 		break;
 	case Set:
 		SETT[1] = new SET;
@@ -279,291 +310,234 @@ ordinal_pair::ordinal_pair(const ordinal_pair & op)
 	}
 }
 
-inline ordinal_pair::ordinal_pair(int t1, int t2)
+template<typename T1>
+ordinal_pair::ordinal_pair(T1 t1, const char * chs)
 {
-	type1 = Int;
-	type2 = Int;
+	const type_info &SInfo = typeid(SET);
+	const type_info &IInfo = typeid(int);
+	const type_info &CInfo = typeid(char);
+	const type_info &StrInfo = typeid(string);
+	const type_info &OPInfo = typeid(ordinal_pair);
+	const type_info &t1info = typeid(t1);
+	T1 *tt1 = new T1;
+	*tt1 = t1;
 	SETT[0] = NULL;
-	SETT[1] = NULL;
 	OP[0] = NULL;
-	OP[1] = NULL;
-	I[0] = t1;
-	I[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(int t1, char t2)
-{
-	type1 = Int;
-	type2 = Char;
-	SETT[0] = NULL;
+	I[0] = NULL;
+	CH[0] = NULL;
+	STR[0] = NULL;
 	SETT[1] = NULL;
-	OP[0] = NULL;
 	OP[1] = NULL;
-	I[0] = t1;
-	CH[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(int t1, string t2)
-{
-	type1 = Int;
+	I[1] = NULL;
+	CH[1] = NULL;
+
+	if (t1info == IInfo)
+	{
+		type1 = Int;
+		I[0] = (int *)tt1;
+	}
+	else if (t1info == CInfo)
+	{
+		type1 = Char;
+		CH[0] = (char *)tt1;
+	}
+	else if (t1info == StrInfo)
+	{
+		type1 = Str;
+		STR[0] = (string *)tt1;
+	}
+	else if (t1info == SInfo)
+	{
+		type1 = Set;
+		SETT[0] = (SET *)tt1;
+	}
+	else if (t1info == OPInfo)
+	{
+		type1 = Ordinal_pair;
+		OP[0] = (ordinal_pair *)tt1;
+	}
+	else
+	{
+		cout << "不支持的数据类型：" << t1info.name() << endl;
+		type1 = null;
+	}
+
 	type2 = Str;
+	STR[1] = new string;
+	*STR[1] = chs;
+}
+
+template<typename T1, typename T2>
+ordinal_pair::ordinal_pair(T1 t1, T2 t2)
+{
+	const type_info &SInfo = typeid(SET);
+	const type_info &IInfo = typeid(int);
+	const type_info &CInfo = typeid(char);
+	const type_info &StrInfo = typeid(string);
+	const type_info &OPInfo = typeid(ordinal_pair);
+	const type_info &t1info = typeid(t1);
+	const type_info &t2info = typeid(t2);
+	T1 *tt1 = new T1;
+	T2 *tt2 = new T2;
+
+	*tt1 = t1;
+	*tt2 = t2;
 	SETT[0] = NULL;
+	OP[0] = NULL;
+	I[0] = NULL;
+	CH[0] = NULL;
+	STR[0] = NULL;
 	SETT[1] = NULL;
-	OP[0] = NULL;
 	OP[1] = NULL;
-	I[0] = t1;
-	STR[1] = t2;
+	I[1] = NULL;
+	CH[1] = NULL;
+	STR[1] = NULL;
+		
+	if (t1info == IInfo)
+	{
+		type1 = Int;
+		I[0] = (int *)tt1;
+	}
+	else if (t1info == CInfo)
+	{
+		type1 = Char;
+		CH[0] = (char *)tt1;
+	}
+	else if (t1info == StrInfo)
+	{
+		type1 = Str;
+		STR[0] = (string *)tt1;
+	}
+	else if (t1info == SInfo)
+	{
+		type1 = Set;
+		SETT[0] = (SET *)tt1;
+	}
+	else if (t1info == OPInfo)
+	{
+		type1 = Ordinal_pair;
+		OP[0] = (ordinal_pair *)tt1;
+	}
+	else
+	{
+		cout << "不支持的数据类型：" << t1info.name() << endl;
+		type1 = null;
+	}
+		
+
+	if (t2info == IInfo)
+	{
+		type2 = Int;
+		I[1] = (int *)tt2;
+	}
+	else if (t2info == CInfo)
+	{
+		type2 = Char;
+		CH[1] = (char *)tt2;
+	}
+	else if (t2info == StrInfo)
+	{
+		type2 = Str;
+		STR[1] = (string *)tt2;
+	}
+	else if (t2info == SInfo)
+	{
+		type2 = Set;
+		SETT[1] = (SET *)tt2;
+	}
+	else if (t2info == OPInfo)
+	{
+		type2 = Ordinal_pair;
+		OP[1] = (ordinal_pair *)tt2;
+	}
+	else
+	{
+		cout << "不支持的数据类型：" << t2info.name() << endl;
+		type2 = null;
+	}
+		
 }
-inline ordinal_pair::ordinal_pair(int t1, SET t2)
+
+template<typename T2>
+ordinal_pair::ordinal_pair(const char * chs, T2 t2)
 {
-	type1 = Int;
-	type2 = Set;
+	const type_info &SInfo = typeid(SET);
+	const type_info &IInfo = typeid(int);
+	const type_info &CInfo = typeid(char);
+	const type_info &StrInfo = typeid(string);
+	const type_info &OPInfo = typeid(ordinal_pair);
+	const type_info &t2info = typeid(t2);
+	T2 *tt2 = new T2;
+	*tt2 = t2;
 	SETT[0] = NULL;
 	OP[0] = NULL;
-	OP[1] = NULL;
-	I[0] = t1;
-	SETT[1] = new SET;
-	*SETT[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(int t1, ordinal_pair t2)
-{
-	type1 = Int;
-	type2 = Ordinal_pair;
-	SETT[0] = NULL;
+	I[0] = NULL;
+	CH[0] = NULL;
 	SETT[1] = NULL;
-	OP[0] = NULL;
-	I[0] = t1;
-	OP[1] = new ordinal_pair;
-	*OP[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(char t1, int t2)
-{
-	type1 = Char;
-	type2 = Int;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
 	OP[1] = NULL;
-	CH[0] = t1;
-	I[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(char t1, char t2)
-{
-	type1 = Char;
-	type2 = Char;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	CH[0] = t1;
-	CH[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(char t1, string t2)
-{
-	type1 = Char;
-	type2 = Str;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	CH[0] = t1;
-	STR[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(char t1, SET t2)
-{
-	type1 = Char;
-	type2 = Set;
-	SETT[0] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	CH[0] = t1;
-	SETT[1] = new SET;
-	*SETT[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(char t1, ordinal_pair t2)
-{
-	type1 = Char;
-	type2 = Ordinal_pair;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	CH[0] = t1;
-	OP[1] = new ordinal_pair;
-	*OP[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(string t1, int t2)
-{
+	I[1] = NULL;
+	CH[1] = NULL;
+	STR[1] = NULL;
+
 	type1 = Str;
-	type2 = Int;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	STR[0] = t1;
-	I[1] = t2;
+	STR[0] = new string;
+	*STR[0] = chs;
+	
+	if (t2info == IInfo)
+	{
+		type2 = Int;
+		I[1] = (int *)tt2;
+	}
+	else if (t2info == CInfo)
+	{
+		type2 = Char;
+		CH[1] = (char *)tt2;
+	}
+	else if (t2info == StrInfo)
+	{
+		type2 = Str;
+		STR[1] = (string *)tt2;
+		cout << STR[1] << endl;
+		cout << *STR[1] << endl;
+	}
+	else if (t2info == SInfo)
+	{
+		type2 = Set;
+		SETT[1] = (SET *)tt2;
+	}
+	else if (t2info == OPInfo)
+	{
+		type2 = Ordinal_pair;
+		OP[1] = (ordinal_pair *)tt2;
+	}
+	else
+	{
+		cout << "不支持的数据类型：" << t2info.name() << endl;
+		type2 = null;
+	}
+
 }
-inline ordinal_pair::ordinal_pair(string t1, char t2)
-{
-	type1 = Str;
-	type2 = Char;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	STR[0] = t1;
-	CH[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(string t1, string t2)
-{
-	type1 = Str;
-	type2 = Str;
-	STR[0] = t1;
-	STR[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(string t1, SET t2)
-{
-	type1 = Str;
-	type2 = Set;
-	SETT[0] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	STR[0] = t1;
-	SETT[1] = new SET;
-	*SETT[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(string t1, ordinal_pair t2)
-{
-	type1 = Str;
-	type2 = Ordinal_pair;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	STR[0] = t1;
-	OP[1] = new ordinal_pair;
-	*OP[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(SET t1, int t2)
-{
-	type1 = Set;
-	type2 = Int;;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	SETT[0] = new SET;
-	*SETT[0] = t1;
-	I[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(SET t1, char t2)
-{
-	type1 = Set;
-	type2 = Char;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	SETT[0] = new SET;
-	*SETT[0] = t1;
-	CH[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(SET t1, string t2)
-{
-	type1 = Set;
-	type2 = Str;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	SETT[0] = new SET;
-	*SETT[0] = t1;
-	STR[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(SET t1, SET t2)
-{
-	type1 = Set;
-	type2 = Set;
-	OP[0] = NULL;
-	OP[1] = NULL;
-	SETT[0] = new SET;
-	*SETT[0] = t1;
-	SETT[1] = new SET;
-	*SETT[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(SET t1, ordinal_pair t2)
-{
-	type1 = Set;
-	type2 = Ordinal_pair;
-	SETT[1] = NULL;
-	OP[0] = NULL;
-	SETT[0] = new SET;
-	*SETT[0] = t1;
-	OP[1] = new ordinal_pair;
-	*OP[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(ordinal_pair t1, int t2)
-{
-	type1 = Ordinal_pair;
-	type2 = Int;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[1] = NULL;
-	OP[0] = new ordinal_pair;
-	*OP[0] = t1;
-	I[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(ordinal_pair t1, char t2)
-{
-	type1 = Ordinal_pair;
-	type2 = Char;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[1] = NULL;
-	OP[0] = new ordinal_pair;
-	*OP[0] = t1;
-	CH[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(ordinal_pair t1, string t2)
-{
-	type1 = Ordinal_pair;
-	type2 = Str;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[1] = NULL;
-	OP[0] = new ordinal_pair;
-	*OP[0] = t1;
-	STR[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(ordinal_pair t1, SET t2)
-{
-	type1 = Ordinal_pair;
-	type2 = Set;
-	SETT[0] = NULL;
-	OP[1] = NULL;
-	OP[0] = new ordinal_pair;
-	*OP[0] = t1;
-	SETT[1] = new SET;
-	*SETT[1] = t2;
-}
-inline ordinal_pair::ordinal_pair(ordinal_pair t1, ordinal_pair t2)
-{
-	type1 = Ordinal_pair;
-	type2 = Ordinal_pair;
-	SETT[0] = NULL;
-	SETT[1] = NULL;
-	OP[0] = new ordinal_pair;
-	*OP[0] = t1;
-	OP[1] = new ordinal_pair;
-	*OP[1] = t2;
-}
+
 inline void ordinal_pair::component1(int t)
 {
 	type1 = Int;
-	I[0] = t;
+	delete I[0];
+	I[0] = new int;
+	*I[0] = t;
 }
 inline void ordinal_pair::component1(char t)
 {
 	type1 = Char;
-	CH[0] = t;
+	delete CH[0];
+	CH[0] = new char;
+	*CH[0] = t;
 }
 inline void ordinal_pair::component1(string t)
 {
 	type1 = Str;
-	STR[0] = t;
+	delete STR[0];
+	STR[0] = new string;
+	*STR[0] = t;
 }
 inline void ordinal_pair::component1(SET t)
 {
@@ -579,31 +553,38 @@ inline void ordinal_pair::component1(ordinal_pair t)
 	OP[0] = new ordinal_pair;
 	*OP[0] = t;
 }
+
 inline void ordinal_pair::component2(int t)
 {
-	type1 = Int;
-	I[1] = t;
+	type2 = Int;
+	delete I[1];
+	I[1] = new int;
+	*I[1] = t;
 }
 inline void ordinal_pair::component2(char t)
 {
-	type1 = Char;
-	CH[1] = t;
+	type2 = Char;
+	delete CH[1];
+	CH[1] = new char;
+	*CH[1] = t;
 }
 inline void ordinal_pair::component2(string t)
 {
-	type1 = Str;
-	STR[1] = t;
+	type2 = Str;
+	delete STR[1];
+	STR[1] = new string;
+	*STR[1] = t;
 }
 inline void ordinal_pair::component2(SET t)
 {
-	type1 = Set;
+	type2 = Set;
 	delete SETT[1];
 	SETT[1] = new SET;
 	*SETT[1] = t;
 }
 inline void ordinal_pair::component2(ordinal_pair t)
 {
-	type1 = Ordinal_pair;
+	type2 = Ordinal_pair;
 	delete OP[1];
 	OP[1] = new ordinal_pair;
 	*OP[1] = t;
@@ -615,13 +596,13 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type1)
 	{
 	case Int:
-		s += I[0]*200;
+		s += *I[0]*200;
 		break;
 	case Char:
-		s += CH[0]*400;
+		s += *CH[0]*400;
 		break;
 	case Str:
-		s = (s + STR[0].length() + STR[0].at(0))*1000;
+		s = (s + STR[0]->length() + STR[0]->at(0))*1000;
 		break;
 	case Set:
 		s += SETT[0]->SETHash()/1000;
@@ -637,13 +618,13 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type2)
 	{
 	case Int:
-		s += I[1]*100;
+		s += *I[1]*100;
 		break;
 	case Char:
-		s += CH[1]*300;
+		s += *CH[1]*300;
 		break;
 	case Str:
-		s = (s + STR[1].length() + STR[1].at(0))*900;
+		s = (s + STR[1]->length() + STR[1]->at(0))*900;
 		break;
 	case Set:
 		s += SETT[1]->SETHash() / 900;
@@ -666,15 +647,15 @@ bool ordinal_pair::operator==(const ordinal_pair & op)
 		switch (type1)
 		{
 		case Int:
-			if (I[0] != op.I[0])
+			if (*I[0] != *op.I[0])
 				return false;
 			break;
 		case Char:
-			if (CH[0] != op.CH[0])
+			if (*CH[0] != *op.CH[0])
 				return false;
 			break;
 		case Str:
-			if (STR[0] != op.STR[0])
+			if (*STR[0] != *op.STR[0])
 				return false;
 			break;
 		case Set:
@@ -693,15 +674,15 @@ bool ordinal_pair::operator==(const ordinal_pair & op)
 		switch (type2)
 		{
 		case Int:
-			if (I[1] != op.I[1])
+			if (*I[1] != *op.I[1])
 				return false;
 			break;
 		case Char:
-			if (CH[1] != op.CH[1])
+			if (*CH[1] != *op.CH[1])
 				return false;
 			break;
 		case Str:
-			if (STR[1] != op.STR[1])
+			if (*STR[1] != *op.STR[1])
 				return false;
 			break;
 		case Set:
@@ -730,13 +711,13 @@ ostream & operator<<(ostream & os, ordinal_pair & op)
 	switch (op.type1)
 	{
 	case Int:
-		os << op.I[0];
+		os << *op.I[0];
 		break;
 	case Char:
-		os << '\'' << op.CH[0] << '\'';
+		os << '\'' << *op.CH[0] << '\'';
 		break;
 	case Str:
-		os << '"' << op.STR[0] << '"';
+		os << '"' << *op.STR[0] << '"';
 		break;
 	case Set:
 		os << *op.SETT[0];
@@ -754,13 +735,13 @@ ostream & operator<<(ostream & os, ordinal_pair & op)
 	switch (op.type2)
 	{
 	case Int:
-		os << op.I[1];
+		os << *op.I[1];
 		break;
 	case Char:
-		os << '\'' << op.CH[1] << '\'';
+		os << '\'' << *op.CH[1] << '\'';
 		break;
 	case Str:
-		os << '"' << op.STR[1] << '"';
+		os << '"' << *op.STR[1] << '"';
 		break;
 	case Set:
 		os << *op.SETT[1];
