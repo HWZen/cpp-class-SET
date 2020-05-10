@@ -78,11 +78,11 @@ public:
 	/******************构造函数（7重载）*******************/
 	SET() { Empty = true; };
 	SET(const SET &S);
-	SET(initializer_list<int> I) { IS.insert(I); };
-	SET(initializer_list<char> ch) { CHS.insert(ch); };
-	SET(initializer_list<string> str) { STRS.insert(str); };
-	SET(initializer_list<ordinal_pair> op) { OPS.insert(op); };
-	SET(initializer_list<SET> Set) { SETS.insert(Set); };
+	SET(initializer_list<int> I) { IS.insert(I); Empty = false; };
+	SET(initializer_list<char> ch) { CHS.insert(ch); Empty = false; };
+	SET(initializer_list<string> str) { STRS.insert(str); Empty = false; };
+	SET(initializer_list<ordinal_pair> op) { OPS.insert(op); Empty = false; };
+	SET(initializer_list<SET> Set) { SETS.insert(Set); Empty = false; };
 
 	~SET() {};//析构函数
 

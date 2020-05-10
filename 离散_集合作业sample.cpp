@@ -9,8 +9,10 @@ using namespace std;
 
 int main()
 {
-	
-	SET SET1 = { 1,2,3,4,5,6 };
+	SET SET0 = {};
+	cout << "SET0:" << SET0 << endl;
+
+	SET SET1({ 1,2,3,4 });
 	cout << "SET1:" << SET1 << endl;
 
 	ordinal_pair op1 = { 25, "Hello,world!" };
@@ -20,7 +22,7 @@ int main()
 	SET2.push(op1);
 	cout << "SET2:" << SET2 << endl;;
 
-	SET SET3 = { 2,3,7};
+	SET SET3 = { 1,3,5,7 };
 	SET3.push({ 'H', 'l' });
 	SET3.push(SET1);
 	SET3.push(op1);
@@ -41,7 +43,7 @@ int main()
 	SET SET8 = SET4.power();
 	cout << "SET8:" << SET8 << endl;
 
-	SET SET9 = SET4 * SET6;
+	SET SET9 = SET5 * SET6;
 	cout << "SET9:" << SET9 << endl;
 
 	return 0;
