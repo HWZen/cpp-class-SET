@@ -73,7 +73,9 @@ A class named SET can storage of data mixed<br>
 * 全部数据用指针代替常量。
 
 ## 5月11日更新
-### SET（集合）类补BUG
+### SET（集合）类补BUG、更新示例文件
 * 修复有参构造函数Empty依然为true
+* 示例文件重命名
+* 示例文件更新
 
 [My blog](https://hwzen.myds.me:17001 "变态文春の又一个博客")<br>
