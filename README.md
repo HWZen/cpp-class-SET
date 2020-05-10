@@ -1,6 +1,6 @@
 cpp-class-SET
 =============
-A class named SET can storage of data mixed<br>
+### A class named SET can storage of data mixed<br>
 * 包含两个类：'SET'（集合）、'ordinal_pair'（序偶）<br>
 * 支持的数据类型：`int`,`char`,`string`,`SET`,ordinal_pair`<br>
 * 支持不同类型数据混合储存<br>
