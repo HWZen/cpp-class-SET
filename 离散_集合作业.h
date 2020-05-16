@@ -84,6 +84,97 @@ public:
 	SET(initializer_list<ordinal_pair> op) { OPS.insert(op); Empty = false; };
 	SET(initializer_list<SET> Set) { SETS.insert(Set); Empty = false; };
 
+	class iterator //迭代器
+	{
+	public:
+		iterator() {};
+		iterator(SET *i, int p) : THIS(i), pos(p) {}
+
+		~iterator() {};
+
+		bool operator!=(iterator it) //重载!=
+		{
+			return (this->pos != it.pos) || (this->THIS != it.THIS);
+		}
+
+		bool operator==(iterator it) //重载==
+		{
+			return (this->pos == it.pos) && (this->THIS == it.THIS);
+		}
+
+		iterator operator++() //重载++
+		{
+			pos++;
+			return *this;
+		}
+
+		SET &operator*() //重载*
+		{
+			int Pos = pos;
+			if (Pos < THIS->IS.size())
+			{
+				set<int>::iterator iti = THIS->IS.begin();
+				for (int i = 0; i < Pos; i++)
+					iti++;
+				SET* Temp = new SET;
+				*Temp = { *iti };
+				return *Temp;
+			}
+			Pos -= THIS->IS.size();
+			if (Pos < THIS->CHS.size())
+			{
+				set<char>::iterator itch = THIS->CHS.begin();
+				for (int i = 0; i < Pos; i++)
+					itch++;
+				SET* Temp = new SET;
+				*Temp = { *itch };
+				return *Temp;
+			}
+			Pos -= THIS->CHS.size();
+			if (Pos < THIS->STRS.size())
+			{
+				set<string>::iterator itstr = THIS->STRS.begin();
+				for (int i = 0; i < Pos; i++)
+					itstr++;
+				SET* Temp = new SET;
+				*Temp = { *itstr };
+				return *Temp;
+			}
+			Pos -= THIS->STRS.size();
+			if (Pos < THIS->SETS.size())
+			{
+				set<SET>::iterator itset = THIS->SETS.begin();
+				for (int i = 0; i < Pos; i++)
+					itset++;
+				SET* Temp = new SET;
+				*Temp = { *itset };
+				return *Temp;
+			}
+			Pos -= THIS->SETS.size();
+			if (Pos < THIS->OPS.size())
+			{
+				set<ordinal_pair>::iterator itop = THIS->OPS.begin();
+				for (int i = 0; i < Pos; i++)
+					itop++;
+				SET* Temp = new SET;
+				*Temp = { *itop };
+				return *Temp;
+			}
+		}
+
+	private:
+		SET* THIS = nullptr;
+		int pos = 0;
+		int * I = nullptr;
+		char * CH = nullptr;
+		string * STR = nullptr;
+		SET * SETT = nullptr;
+		ordinal_pair * OP = nullptr;
+	};
+	iterator begin() { return iterator(this, 0); }		   //返回头部迭代器
+	iterator end() { return iterator(this, (int)size()); } //返回尾部迭代器
+
+
 	~SET() {};//析构函数
 
 	bool operator==(const SET & S);//重载==

@@ -9,6 +9,7 @@ using namespace std;
 
 int main()
 {
+
 	SET SET0 = {};
 	cout << "SET0:" << SET0 << endl;
 
@@ -45,6 +46,15 @@ int main()
 
 	SET SET9 = SET5 * SET6;
 	cout << "SET9:" << SET9 << endl;
+
+	cout << endl;
+
+	SET::iterator its = SET5.begin();//µü´úÆ÷
+	++its;
+	cout << *its << endl;
+	for (SET T : SET5)
+		cout << T << " ";
+	
 
 	return 0;
 }
