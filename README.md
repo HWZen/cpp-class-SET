@@ -82,13 +82,37 @@ cpp-class-SET
 ### SET（集合）添加迭代器
 * 对迭代器取址返回一个SET集合，集合包含迭代器当前所指向的元素，
 * 可用`for(SET T:(SET)S)`进行单个元素遍历
+
 使用示例代码：
 ```c++
-	SET::iterator its = SET5.begin();//定义迭代器
-	++its;
-	cout << *its << endl;
-	for (SET T : SET5)
-		cout << T << " ";
+SET::iterator its = SET5.begin();//定义迭代器
+++its;
+cout << *its << endl;
+for (SET T : SET5)//使用迭代器遍历
+cout << T << " ";
+```
+
+## 5月16日更新
+### SET（集合）添加>>重载，可以使用cin向SET添加数据、simple更新
+* 先读入一个整数，表示输入类型：`int:0 char:1 string:3 Empty:5`，然后读取接下来的数据直到遇到`EOF`
+* 应老师要求，sample更新从文件读入数据。
+
+使用实列代码
+```c++
+SET SET1;
+cin>>SET1;
+
+ifstream input("input.txt");
+SET SET1;
+if (input)
+{
+input >> SET1;
+cout << "SET1:" << SET1 << endl;
+}
+else
+cout << "input open failed" << endl;
+input.close()
+
 ```
 
 [My blog](https://hwzen.myds.me:17001 "变态文春の又一个博客")

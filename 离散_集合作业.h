@@ -1,19 +1,23 @@
 #pragma once
-#include<set>
-#include<iostream>
-#include<string>
-#include<algorithm>
+#include <set>
+#include <iostream>
+#include <string>
+#include <algorithm>
 using namespace std;
 
-class SET;//SET类声明
-class ordinal_pair;//序偶类声明
-ostream & operator<<(ostream & os, SET & S);//SET类重载<<声明
-ostream & operator<<(ostream & os, ordinal_pair & op);//序偶类重载<<声明
-enum types//枚举类型定义声明
+class SET;											//SET类声明
+class ordinal_pair;									//序偶类声明
+ostream &operator<<(ostream &os, SET &S);			//SET类重载<<声明
+ostream &operator<<(ostream &os, ordinal_pair &op); //序偶类重载<<声明
+enum types											//枚举类型定义声明
 {
-	Int, Char, Str, Set, Ordinal_pair, null
+	Int,
+	Char,
+	Str,
+	Set,
+	Ordinal_pair,
+	null
 };
-
 
 /************序偶完整声明**************/
 class ordinal_pair
@@ -32,13 +36,13 @@ public:
 	template <typename T1, typename T2>
 	ordinal_pair(T1 t1, T2 t2);
 
-	ordinal_pair(const ordinal_pair& op);
+	ordinal_pair(const ordinal_pair &op);
 
-	void operator=(const ordinal_pair& op);//重载赋值运算
-	~ordinal_pair();//析构函数
-	bool operator==(const ordinal_pair & O);//重载符号==
-	bool operator<(const ordinal_pair & op) const { return (OPHash() < op.OPHash()); };//重载符号<
-	friend ostream& operator<<(ostream &os, ordinal_pair & op);//声明重载符号<<(友元)
+	void operator=(const ordinal_pair &op);											   //重载赋值运算
+	~ordinal_pair();																   //析构函数
+	bool operator==(const ordinal_pair &O);											   //重载符号==
+	bool operator<(const ordinal_pair &op) const { return (OPHash() < op.OPHash()); }; //重载符号<
+	friend ostream &operator<<(ostream &os, ordinal_pair &op);						   //声明重载符号<<(友元)
 
 	/**********第一、第二分量设置函数（5*2重载）************/
 	void component1(int t);
@@ -52,24 +56,19 @@ public:
 	void component2(SET t);
 	void component2(ordinal_pair t);
 
-	size_t OPHash() const;//序偶变量量化函数，用于不同序偶变量的比较
+	size_t OPHash() const; //序偶变量量化函数，用于不同序偶变量的比较
 
 private:
-	enum types type1,type2;//第一、第二变量类型
+	enum types type1, type2; //第一、第二变量类型
 
 	/********储存分量数据，允许int,char,string,SET和序偶类型作为分量*******/
 	/*******************5月10日，全部数据用指针代替常量********************/
-	int * I[2];
-	char * CH[2];
-	string * STR[2];
-	SET * SETT[2];
-	ordinal_pair * OP[2];
-	
-
+	int *I[2];
+	char *CH[2];
+	string *STR[2];
+	SET *SETT[2];
+	ordinal_pair *OP[2];
 };
-
-
-
 
 /**************SET完整声明****************/
 class SET
@@ -78,19 +77,39 @@ public:
 	/******************构造函数（7重载）*******************/
 	SET() { Empty = true; };
 	SET(const SET &S);
-	SET(initializer_list<int> I) { IS.insert(I); Empty = false; };
-	SET(initializer_list<char> ch) { CHS.insert(ch); Empty = false; };
-	SET(initializer_list<string> str) { STRS.insert(str); Empty = false; };
-	SET(initializer_list<ordinal_pair> op) { OPS.insert(op); Empty = false; };
-	SET(initializer_list<SET> Set) { SETS.insert(Set); Empty = false; };
+	SET(initializer_list<int> I)
+	{
+		IS.insert(I);
+		Empty = false;
+	};
+	SET(initializer_list<char> ch)
+	{
+		CHS.insert(ch);
+		Empty = false;
+	};
+	SET(initializer_list<string> str)
+	{
+		STRS.insert(str);
+		Empty = false;
+	};
+	SET(initializer_list<ordinal_pair> op)
+	{
+		OPS.insert(op);
+		Empty = false;
+	};
+	SET(initializer_list<SET> Set)
+	{
+		SETS.insert(Set);
+		Empty = false;
+	};
 
 	class iterator //迭代器
 	{
 	public:
-		iterator() {};
+		iterator(){};
 		iterator(SET *i, int p) : THIS(i), pos(p) {}
 
-		~iterator() {};
+		~iterator(){};
 
 		bool operator!=(iterator it) //重载!=
 		{
@@ -116,8 +135,8 @@ public:
 				set<int>::iterator iti = THIS->IS.begin();
 				for (int i = 0; i < Pos; i++)
 					iti++;
-				SET* Temp = new SET;
-				*Temp = { *iti };
+				SET *Temp = new SET;
+				*Temp = {*iti};
 				return *Temp;
 			}
 			Pos -= THIS->IS.size();
@@ -126,8 +145,8 @@ public:
 				set<char>::iterator itch = THIS->CHS.begin();
 				for (int i = 0; i < Pos; i++)
 					itch++;
-				SET* Temp = new SET;
-				*Temp = { *itch };
+				SET *Temp = new SET;
+				*Temp = {*itch};
 				return *Temp;
 			}
 			Pos -= THIS->CHS.size();
@@ -136,8 +155,8 @@ public:
 				set<string>::iterator itstr = THIS->STRS.begin();
 				for (int i = 0; i < Pos; i++)
 					itstr++;
-				SET* Temp = new SET;
-				*Temp = { *itstr };
+				SET *Temp = new SET;
+				*Temp = {*itstr};
 				return *Temp;
 			}
 			Pos -= THIS->STRS.size();
@@ -146,8 +165,8 @@ public:
 				set<SET>::iterator itset = THIS->SETS.begin();
 				for (int i = 0; i < Pos; i++)
 					itset++;
-				SET* Temp = new SET;
-				*Temp = { *itset };
+				SET *Temp = new SET;
+				*Temp = {*itset};
 				return *Temp;
 			}
 			Pos -= THIS->SETS.size();
@@ -156,70 +175,108 @@ public:
 				set<ordinal_pair>::iterator itop = THIS->OPS.begin();
 				for (int i = 0; i < Pos; i++)
 					itop++;
-				SET* Temp = new SET;
-				*Temp = { *itop };
+				SET *Temp = new SET;
+				*Temp = {*itop};
 				return *Temp;
 			}
+			return SET();
 		}
 
 	private:
-		SET* THIS = nullptr;
+		SET *THIS = nullptr;
 		int pos = 0;
-		int * I = nullptr;
-		char * CH = nullptr;
-		string * STR = nullptr;
-		SET * SETT = nullptr;
-		ordinal_pair * OP = nullptr;
+		int *I = nullptr;
+		char *CH = nullptr;
+		string *STR = nullptr;
+		SET *SETT = nullptr;
+		ordinal_pair *OP = nullptr;
 	};
 	iterator begin() { return iterator(this, 0); }		   //返回头部迭代器
 	iterator end() { return iterator(this, (int)size()); } //返回尾部迭代器
 
+	~SET(){}; //析构函数
 
-	~SET() {};//析构函数
+	bool operator==(const SET &S);												   //重载==
+	void operator=(const SET &S);												   //重载赋值运算
+	inline bool operator<(const SET &S) const { return SETHash() < S.SETHash(); }; //重载<
+	SET operator+(const SET &S);												   //重载+（并集）
+	SET operator&&(const SET &S);												   //重载&（交集）
+	SET operator-(const SET &S);												   //重载-（差集）
+	SET operator*(const SET &S);												   //重载*（笛卡尔积）
+	SET power();																   //幂集
+	void power(int i, SET T, SET *Res);											   //幂集执行函数
+	friend SET Symmetrical_difference(const SET &S1, const SET &S2);			   //对称差（友元）
+	friend ostream &operator<<(ostream &os, SET &S);							   //声明重载符号<<(友元)
+	friend istream &operator>>(istream &in, SET &S);							   //声明重载符号>>(友元)
+	size_t size() const;														   //返回元素个数
+	size_t SETHash() const;														   //SET变量量化函数，用于不同序偶变量的比较
 
-	bool operator==(const SET & S);//重载==
-	void operator=(const SET&S);//重载赋值运算
-	inline bool operator<(const SET &S) const { return SETHash() < S.SETHash(); };//重载<
-	SET operator+(const SET & S);//重载+（并集）
-	SET operator&&(const SET & S);//重载&（交集）
-	SET operator-(const SET & S);//重载-（差集）
-	SET operator*(const SET & S);//重载*（笛卡尔积）
-	SET power();//幂集
-	void power(int i,SET T,SET* Res);//幂集执行函数
-	friend SET Symmetrical_difference(const SET & S1, const SET & S2);//对称差（友元）
-	friend ostream& operator<<(ostream &os, SET & S);//声明重载符号<<(友元)
-	size_t size() const;//返回元素个数
-	size_t SETHash() const;//SET变量量化函数，用于不同序偶变量的比较
-	
 	/*****************添加元素函数（5重载）*******************/
-	inline void push(int I) { IS.insert(I); Empty = false; };
-	inline void push(char ch) { CHS.insert(ch); Empty = false; };
-	inline void push(string str) { STRS.insert(str); Empty = false; };
-	inline void push(SET Set) { SETS.insert(Set); Empty = false; };
-	inline void push(ordinal_pair op) { OPS.insert(op); Empty = false; };
-	inline void push(initializer_list<int> I) { IS.insert(I); Empty = false; };
-	inline void push(initializer_list<char> ch) { CHS.insert(ch); Empty = false; };
-	inline void push(initializer_list<string> str) { STRS.insert(str); Empty = false; };
-	inline void push(initializer_list<SET> Set) { SETS.insert(Set); Empty = false; };
-	inline void push(initializer_list<ordinal_pair> op) { OPS.insert(op); Empty = false; };
+	inline void push(int I)
+	{
+		IS.insert(I);
+		Empty = false;
+	};
+	inline void push(char ch)
+	{
+		CHS.insert(ch);
+		Empty = false;
+	};
+	inline void push(string str)
+	{
+		STRS.insert(str);
+		Empty = false;
+	};
+	inline void push(SET Set)
+	{
+		SETS.insert(Set);
+		Empty = false;
+	};
+	inline void push(ordinal_pair op)
+	{
+		OPS.insert(op);
+		Empty = false;
+	};
+	inline void push(initializer_list<int> I)
+	{
+		IS.insert(I);
+		Empty = false;
+	};
+	inline void push(initializer_list<char> ch)
+	{
+		CHS.insert(ch);
+		Empty = false;
+	};
+	inline void push(initializer_list<string> str)
+	{
+		STRS.insert(str);
+		Empty = false;
+	};
+	inline void push(initializer_list<SET> Set)
+	{
+		SETS.insert(Set);
+		Empty = false;
+	};
+	inline void push(initializer_list<ordinal_pair> op)
+	{
+		OPS.insert(op);
+		Empty = false;
+	};
 
 private:
-	bool Empty;//是否包含空集
+	bool Empty; //是否包含空集
 
 	/*储存元素数据，允许int,char,string,SET和序偶类型作为元素*/
-	set<int>IS;
-	set<char>CHS;
-	set<string>STRS;
-	set<SET>SETS;
-	set<ordinal_pair>OPS;
-
+	set<int> IS;
+	set<char> CHS;
+	set<string> STRS;
+	set<SET> SETS;
+	set<ordinal_pair> OPS;
 };
-
-
 
 /************************序偶函数定义****************************/
 
-void ordinal_pair::operator=(const ordinal_pair & op)
+void ordinal_pair::operator=(const ordinal_pair &op)
 {
 	type1 = op.type1;
 	type2 = op.type2;
@@ -287,7 +344,6 @@ void ordinal_pair::operator=(const ordinal_pair & op)
 	default:
 		break;
 	}
-
 }
 
 ordinal_pair::ordinal_pair()
@@ -309,13 +365,17 @@ ordinal_pair::ordinal_pair()
 inline ordinal_pair::~ordinal_pair()
 {
 	if (SETT[0] != NULL)
-		delete SETT[0]; SETT[0] = NULL;
+		delete SETT[0];
+	SETT[0] = NULL;
 	if (SETT[1] != NULL)
-		delete SETT[1]; SETT[1] = NULL;
+		delete SETT[1];
+	SETT[1] = NULL;
 	if (OP[0] != NULL)
-		delete OP[0]; OP[0] = NULL;
+		delete OP[0];
+	OP[0] = NULL;
 	if (OP[1] != NULL)
-		delete OP[1]; OP[1] = NULL;
+		delete OP[1];
+	OP[1] = NULL;
 	delete I[0];
 	delete I[1];
 	delete CH[0];
@@ -330,7 +390,7 @@ inline ordinal_pair::~ordinal_pair()
 	STR[1] = NULL;
 }
 
-ordinal_pair::ordinal_pair(const ordinal_pair & op)
+ordinal_pair::ordinal_pair(const ordinal_pair &op)
 {
 	type1 = op.type1;
 	type2 = op.type2;
@@ -401,8 +461,8 @@ ordinal_pair::ordinal_pair(const ordinal_pair & op)
 	}
 }
 
-template<typename T1>
-ordinal_pair::ordinal_pair(T1 t1, const char * chs)
+template <typename T1>
+ordinal_pair::ordinal_pair(T1 t1, const char *chs)
 {
 	const type_info &SInfo = typeid(SET);
 	const type_info &IInfo = typeid(int);
@@ -458,7 +518,7 @@ ordinal_pair::ordinal_pair(T1 t1, const char * chs)
 	*STR[1] = chs;
 }
 
-template<typename T1, typename T2>
+template <typename T1, typename T2>
 ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 {
 	const type_info &SInfo = typeid(SET);
@@ -483,7 +543,7 @@ ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 	I[1] = NULL;
 	CH[1] = NULL;
 	STR[1] = NULL;
-		
+
 	if (t1info == IInfo)
 	{
 		type1 = Int;
@@ -514,7 +574,6 @@ ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 		cout << "不支持的数据类型：" << t1info.name() << endl;
 		type1 = null;
 	}
-		
 
 	if (t2info == IInfo)
 	{
@@ -546,11 +605,10 @@ ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 		cout << "不支持的数据类型：" << t2info.name() << endl;
 		type2 = null;
 	}
-		
 }
 
-template<typename T2>
-ordinal_pair::ordinal_pair(const char * chs, T2 t2)
+template <typename T2>
+ordinal_pair::ordinal_pair(const char *chs, T2 t2)
 {
 	const type_info &SInfo = typeid(SET);
 	const type_info &IInfo = typeid(int);
@@ -573,7 +631,7 @@ ordinal_pair::ordinal_pair(const char * chs, T2 t2)
 	type1 = Str;
 	STR[0] = new string;
 	*STR[0] = chs;
-	
+
 	if (t2info == IInfo)
 	{
 		type2 = Int;
@@ -606,7 +664,6 @@ ordinal_pair::ordinal_pair(const char * chs, T2 t2)
 		cout << "不支持的数据类型：" << t2info.name() << endl;
 		type2 = null;
 	}
-
 }
 
 inline void ordinal_pair::component1(int t)
@@ -687,19 +744,19 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type1)
 	{
 	case Int:
-		s += *I[0]*200;
+		s += *I[0] * 200;
 		break;
 	case Char:
-		s += *CH[0]*400;
+		s += *CH[0] * 400;
 		break;
 	case Str:
-		s = (s + STR[0]->length() + STR[0]->at(0))*1000;
+		s = (s + STR[0]->length() + STR[0]->at(0)) * 1000;
 		break;
 	case Set:
-		s += SETT[0]->SETHash()/1000;
+		s += SETT[0]->SETHash() / 1000;
 		break;
 	case Ordinal_pair:
-		s += OP[0]->OPHash()/200;
+		s += OP[0]->OPHash() / 200;
 		break;
 	case null:
 		break;
@@ -709,13 +766,13 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type2)
 	{
 	case Int:
-		s += *I[1]*100;
+		s += *I[1] * 100;
 		break;
 	case Char:
-		s += *CH[1]*300;
+		s += *CH[1] * 300;
 		break;
 	case Str:
-		s = (s + STR[1]->length() + STR[1]->at(0))*900;
+		s = (s + STR[1]->length() + STR[1]->at(0)) * 900;
 		break;
 	case Set:
 		s += SETT[1]->SETHash() / 900;
@@ -731,9 +788,9 @@ inline size_t ordinal_pair::OPHash() const
 	return s;
 }
 
-bool ordinal_pair::operator==(const ordinal_pair & op)
+bool ordinal_pair::operator==(const ordinal_pair &op)
 {
-	if (type1 == op.type1&&type2 == op.type2)
+	if (type1 == op.type1 && type2 == op.type2)
 	{
 		switch (type1)
 		{
@@ -793,10 +850,9 @@ bool ordinal_pair::operator==(const ordinal_pair & op)
 	}
 	else
 		return false;
-
 }
 
-ostream & operator<<(ostream & os, ordinal_pair & op)
+ostream &operator<<(ostream &os, ordinal_pair &op)
 {
 	os << '<';
 	switch (op.type1)
@@ -851,11 +907,8 @@ ostream & operator<<(ostream & os, ordinal_pair & op)
 	// TODO: 在此处插入 return 语句
 }
 
-
-
-
 /********************SET函数定义***********************/
-SET::SET(const SET & S)
+SET::SET(const SET &S)
 {
 	Empty = S.Empty;
 	IS = S.IS;
@@ -865,7 +918,7 @@ SET::SET(const SET & S)
 	OPS = S.OPS;
 }
 
-inline void SET::operator=(const SET & S)
+inline void SET::operator=(const SET &S)
 {
 	Empty = S.Empty;
 	IS = S.IS;
@@ -875,10 +928,10 @@ inline void SET::operator=(const SET & S)
 	OPS = S.OPS;
 }
 
-
-bool SET::operator==(const SET & S)
+bool SET::operator==(const SET &S)
 {
-	if(Empty == S.Empty&&IS == S.IS && CHS == S.CHS && STRS == S.STRS);
+	if (Empty == S.Empty && IS == S.IS && CHS == S.CHS && STRS == S.STRS)
+		;
 	{
 		for (SET TSET : SETS)
 			if (S.SETS.find(TSET) == S.SETS.end())
@@ -888,10 +941,9 @@ bool SET::operator==(const SET & S)
 				return false;
 		return true;
 	}
-	
 }
 
-SET SET::operator+(const SET & S)
+SET SET::operator+(const SET &S)
 {
 	SET Temp = S;
 	Temp.IS.insert(IS.begin(), IS.end());
@@ -903,7 +955,7 @@ SET SET::operator+(const SET & S)
 	// TODO: 在此处插入 return 语句
 }
 
-SET SET::operator&&(const SET & S)
+SET SET::operator&&(const SET &S)
 {
 	SET Temp;
 	for (int i : IS)
@@ -928,7 +980,7 @@ SET SET::operator&&(const SET & S)
 	// TODO: 在此处插入 return 语句
 }
 
-SET SET::operator-(const SET & S)
+SET SET::operator-(const SET &S)
 {
 	SET Temp;
 	for (int i : IS)
@@ -954,7 +1006,7 @@ SET SET::operator-(const SET & S)
 	// TODO: 在此处插入 return 语句
 }
 
-SET Symmetrical_difference(const SET & S1, const SET & S2)
+SET Symmetrical_difference(const SET &S1, const SET &S2)
 {
 	SET Temp;
 	for (int i : S1.IS)
@@ -998,7 +1050,7 @@ SET Symmetrical_difference(const SET & S1, const SET & S2)
 	// TODO: 在此处插入 return 语句
 }
 
-SET SET::operator*(const SET & S)
+SET SET::operator*(const SET &S)
 {
 	SET Stemp;
 	for (int i1 : IS)
@@ -1010,7 +1062,8 @@ SET SET::operator*(const SET & S)
 		}
 		for (char ch2 : S.CHS)
 		{
-			ordinal_pair OPTemp(i1, ch2);;
+			ordinal_pair OPTemp(i1, ch2);
+			;
 			Stemp.push(OPTemp);
 		}
 		for (string str2 : S.STRS)
@@ -1033,7 +1086,7 @@ SET SET::operator*(const SET & S)
 	{
 		for (int i2 : S.IS)
 		{
-			ordinal_pair OPTemp( ch1, i2);
+			ordinal_pair OPTemp(ch1, i2);
 			Stemp.push(OPTemp);
 		}
 		for (char ch2 : S.CHS)
@@ -1141,12 +1194,12 @@ SET SET::operator*(const SET & S)
 			Stemp.push(OPTemp);
 		}
 	}
-		
+
 	return Stemp;
 	// TODO: 在此处插入 return 语句
 }
 
-void SET::power(int i, SET T, SET* Res)
+void SET::power(int i, SET T, SET *Res)
 {
 	if (i == size())
 	{
@@ -1170,7 +1223,7 @@ void SET::power(int i, SET T, SET* Res)
 			if (ii < CHS.size())
 			{
 				set<char>::iterator chsi = CHS.begin();
-				for(int I = 0; I < ii; I++)
+				for (int I = 0; I < ii; I++)
 					chsi++;
 				T.push(*chsi);
 			}
@@ -1180,7 +1233,7 @@ void SET::power(int i, SET T, SET* Res)
 				if (ii < STRS.size())
 				{
 					set<string>::iterator strsi = STRS.begin();
-					for(int I = 0; I < ii; I++)
+					for (int I = 0; I < ii; I++)
 						strsi++;
 					T.push(*strsi);
 				}
@@ -1190,7 +1243,7 @@ void SET::power(int i, SET T, SET* Res)
 					if (ii < SETS.size())
 					{
 						set<SET>::iterator setsi = SETS.begin();
-						for(int I = 0; I < ii; I++)
+						for (int I = 0; I < ii; I++)
 							setsi++;
 						T.push(*setsi);
 					}
@@ -1200,7 +1253,7 @@ void SET::power(int i, SET T, SET* Res)
 						if (ii < OPS.size())
 						{
 							set<ordinal_pair>::iterator opsi = OPS.begin();
-							for(int I = 0; I < ii; I++)
+							for (int I = 0; I < ii; I++)
 								opsi++;
 							T.push(*opsi);
 						}
@@ -1219,15 +1272,14 @@ inline SET SET::power()
 	return RES;
 }
 
-
-ostream & operator<<(ostream & os, SET & S)
+ostream &operator<<(ostream &os, SET &S)
 {
 	os << '{';
 	for (int i : S.IS)
 		os << i << ',';
 
 	for (char ch : S.CHS)
-		os <<'\''<< ch <<'\''<< ',';
+		os << '\'' << ch << '\'' << ',';
 
 	for (string str : S.STRS)
 		os << '"' << str << '"' << ',';
@@ -1249,14 +1301,53 @@ ostream & operator<<(ostream & os, SET & S)
 	// TODO: 在此处插入 return 语句
 }
 
+inline istream &operator>>(istream &in, SET &S)
+{
+	int i;
+	in >> i;
+	types Ty = types(i);
+	S.Empty = false;
+	switch (Ty)
+	{
+	case Int:
+		int i;
+		while (in >> i)
+			S.IS.insert(i);
+		break;
+	case Char:
+		char ch;
+		while (in >> ch)
+			S.CHS.insert(ch);
+		break;
+	case Str:
+	{
+		string str;
+		while (in >> str)
+			S.STRS.insert(str);
+		break;
+	}
+	case Set:
+		break;
+	case Ordinal_pair:
+		break;
+	case null:
+		S.Empty = true;
+		break;
+	default:
+		break;
+	}
+	return in;
+	// TODO: 在此处插入 return 语句
+}
+
 inline size_t SET::size() const
 {
-	return IS.size()+CHS.size()+STRS.size()+SETS.size()+OPS.size();
+	return IS.size() + CHS.size() + STRS.size() + SETS.size() + OPS.size();
 }
 
 size_t SET::SETHash() const
 {
-	size_t s = size()*100000;
+	size_t s = size() * 100000;
 	set<int>::iterator isi = IS.begin();
 	set<char>::iterator chsi = CHS.begin();
 	set<string>::iterator strsi = STRS.begin();
@@ -1279,7 +1370,7 @@ size_t SET::SETHash() const
 	}
 	for (int i = 1; i <= SETS.size(); i++)
 	{
-		s += setsi->SETHash()/5000 * i;
+		s += setsi->SETHash() / 5000 * i;
 		setsi++;
 	}
 	for (int i = 1; i <= OPS.size(); i++)

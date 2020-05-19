@@ -1,5 +1,6 @@
-#include<iostream>
-#include"离散_集合作业.h"
+#include <iostream>
+#include <fstream>
+#include "离散_集合作业.h"
 using namespace std;
 //包含两个类：SET（集合）、ordinal_pair（序偶）
 //支持的数据类型：int,char,string,SET,ordinal_pair
@@ -9,22 +10,41 @@ using namespace std;
 
 int main()
 {
+	ifstream input1("input1.txt");
+	ifstream input2("input2.txt");
 
 	SET SET0 = {};
 	cout << "SET0:" << SET0 << endl;
 
-	SET SET1({ 1,2,3,4 });
-	cout << "SET1:" << SET1 << endl;
+	SET SET1;
+	if (input1)
+	{
+		input1 >> SET1;
+		cout << "SET1:" << SET1 << endl;
+	}
+	else
+		cout << "input1 open failed" << endl;
 
-	ordinal_pair op1 = { 25, "Hello,world!" };
-	cout << "op1:" << op1 << endl;;
+	ordinal_pair op1 = {25, "Hello,world!"};
+	cout << "op1:" << op1 << endl;
+	;
 
-	SET SET2 = { 'H','e','l','l','o',',','w','o','r','l','d'};
-	SET2.push(op1);
-	cout << "SET2:" << SET2 << endl;;
+	SET SET2;
+	if (input2)
+	{
+		input2 >> SET2;
+		SET2.push(op1);
+		cout << "SET2:" << SET2 << endl;
+		;
+	}
+	else
+		cout << "input2 open failed" << endl;
 
-	SET SET3 = { 1,3,5,7 };
-	SET3.push({ 'H', 'l' });
+	input1.close();
+	input2.close();
+
+	SET SET3 = {1, 3, 5, 7};
+	SET3.push({'H', 'l'});
 	SET3.push(SET1);
 	SET3.push(op1);
 	cout << "SET3:" << SET3 << endl;
@@ -49,12 +69,11 @@ int main()
 
 	cout << endl;
 
-	SET::iterator its = SET5.begin();//迭代器
+	SET::iterator its = SET5.begin(); //迭代器
 	++its;
 	cout << *its << endl;
 	for (SET T : SET5)
 		cout << T << " ";
-	
 
 	return 0;
 }
