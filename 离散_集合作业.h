@@ -27,11 +27,14 @@ public:
 	/**********5月10日，开始用模板代替重载*********/
 	ordinal_pair();
 
+	//折中解决const char** 无法强制转换成string*的bug
+#if 1
 	template <typename T2>
 	ordinal_pair(const char *chs, T2 t2);
 
 	template <typename T1>
 	ordinal_pair(T1 t1, const char *chs);
+#endif
 
 	template <typename T1, typename T2>
 	ordinal_pair(T1 t1, T2 t2);
@@ -106,10 +109,10 @@ public:
 	class iterator //迭代器
 	{
 	public:
-		iterator(){};
+		iterator() {};
 		iterator(SET *i, int p) : THIS(i), pos(p) {}
 
-		~iterator(){};
+		~iterator() {};
 
 		bool operator!=(iterator it) //重载!=
 		{
@@ -136,7 +139,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					iti++;
 				SET *Temp = new SET;
-				*Temp = {*iti};
+				*Temp = { *iti };
 				return *Temp;
 			}
 			Pos -= THIS->IS.size();
@@ -146,7 +149,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itch++;
 				SET *Temp = new SET;
-				*Temp = {*itch};
+				*Temp = { *itch };
 				return *Temp;
 			}
 			Pos -= THIS->CHS.size();
@@ -156,7 +159,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itstr++;
 				SET *Temp = new SET;
-				*Temp = {*itstr};
+				*Temp = { *itstr };
 				return *Temp;
 			}
 			Pos -= THIS->STRS.size();
@@ -166,7 +169,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itset++;
 				SET *Temp = new SET;
-				*Temp = {*itset};
+				*Temp = { *itset };
 				return *Temp;
 			}
 			Pos -= THIS->SETS.size();
@@ -176,10 +179,11 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itop++;
 				SET *Temp = new SET;
-				*Temp = {*itop};
+				*Temp = { *itop };
 				return *Temp;
 			}
-			return SET();
+			SET *Temp = new SET;
+			return *Temp;
 		}
 
 	private:
@@ -194,7 +198,7 @@ public:
 	iterator begin() { return iterator(this, 0); }		   //返回头部迭代器
 	iterator end() { return iterator(this, (int)size()); } //返回尾部迭代器
 
-	~SET(){}; //析构函数
+	~SET() {}; //析构函数
 
 	bool operator==(const SET &S);												   //重载==
 	void operator=(const SET &S);												   //重载赋值运算
