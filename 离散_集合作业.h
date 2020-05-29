@@ -267,7 +267,7 @@ public:
 		Empty = false;
 	};
 
-private:
+protected:
 	bool Empty; //是否包含空集
 
 	/*储存元素数据，允许int,char,string,SET和序偶类型作为元素*/
@@ -1067,7 +1067,6 @@ SET SET::operator*(const SET &S)
 		for (char ch2 : S.CHS)
 		{
 			ordinal_pair OPTemp(i1, ch2);
-			;
 			Stemp.push(OPTemp);
 		}
 		for (string str2 : S.STRS)
