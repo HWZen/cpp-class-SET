@@ -71,6 +71,8 @@ private:
 	string *STR[2];
 	SET *SETT[2];
 	ordinal_pair *OP[2];
+
+	friend  class  Binary_relationship;
 };
 
 /**************SET完整声明****************/
@@ -267,7 +269,7 @@ public:
 		Empty = false;
 	};
 
-protected:
+private:
 	bool Empty; //是否包含空集
 
 	/*储存元素数据，允许int,char,string,SET和序偶类型作为元素*/
@@ -276,6 +278,8 @@ protected:
 	set<string> STRS;
 	set<SET> SETS;
 	set<ordinal_pair> OPS;
+
+	friend  class  Binary_relationship;
 };
 
 /************************序偶函数定义****************************/
