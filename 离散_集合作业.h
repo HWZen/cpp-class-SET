@@ -200,6 +200,14 @@ public:
 	iterator begin() { return iterator(this, 0); }		   //返回头部迭代器
 	iterator end() { return iterator(this, (int)size()); } //返回尾部迭代器
 
+	bool find(const SET &S)
+	{
+		for (SET T : *this)
+			if (T == S)
+				return true;
+		return false;
+	}
+
 	~SET() {}; //析构函数
 
 	bool operator==(const SET &S);												   //重载==
@@ -752,10 +760,10 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type1)
 	{
 	case Int:
-		s += *I[0] * 200;
+		s += *I[0] * 212;
 		break;
 	case Char:
-		s += *CH[0] * 400;
+		s += *CH[0] * 412;
 		break;
 	case Str:
 		s = (s + STR[0]->length() + STR[0]->at(0)) * 1000;
@@ -774,10 +782,10 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type2)
 	{
 	case Int:
-		s += *I[1] * 100;
+		s += *I[1] * 101;
 		break;
 	case Char:
-		s += *CH[1] * 300;
+		s += *CH[1] * 311;
 		break;
 	case Str:
 		s = (s + STR[1]->length() + STR[1]->at(0)) * 900;
@@ -939,8 +947,8 @@ inline void SET::operator=(const SET &S)
 bool SET::operator==(const SET &S)
 {
 	if (Empty == S.Empty && IS == S.IS && CHS == S.CHS && STRS == S.STRS)
-		;
 	{
+		
 		for (SET TSET : SETS)
 			if (S.SETS.find(TSET) == S.SETS.end())
 				return false;
@@ -949,6 +957,8 @@ bool SET::operator==(const SET &S)
 				return false;
 		return true;
 	}
+	else
+		return false;
 }
 
 SET SET::operator+(const SET &S)
@@ -1298,10 +1308,10 @@ ostream &operator<<(ostream &os, SET &S)
 		os << op << ',';
 
 	if (S.Empty)
-		cout << "Empty_set";
+		os << "Empty_set";
 	else
-		cout << "\b";
-	cout << '}';
+		os << "\b";
+	os << '}';
 
 	return os;
 
