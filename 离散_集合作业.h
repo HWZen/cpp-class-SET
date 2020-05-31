@@ -46,6 +46,8 @@ public:
 	bool operator==(const ordinal_pair &O);											   //重载符号==
 	bool operator<(const ordinal_pair &op) const { return (OPHash() < op.OPHash()); }; //重载符号<
 	friend ostream &operator<<(ostream &os, ordinal_pair &op);						   //声明重载符号<<(友元)
+	friend istream &operator>>(istream &in, ordinal_pair &op);						   //声明重载符号>>(友元)
+	ordinal_pair anti();
 
 	/**********第一、第二分量设置函数（5*2重载）************/
 	void component1(int t);
@@ -72,7 +74,7 @@ private:
 	SET *SETT[2];
 	ordinal_pair *OP[2];
 
-	friend  class  Binary_relationship;
+	friend class Binary_relationship;
 };
 
 /**************SET完整声明****************/
@@ -111,10 +113,10 @@ public:
 	class iterator //迭代器
 	{
 	public:
-		iterator() {};
+		iterator(){};
 		iterator(SET *i, int p) : THIS(i), pos(p) {}
 
-		~iterator() {};
+		~iterator(){};
 
 		bool operator!=(iterator it) //重载!=
 		{
@@ -141,7 +143,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					iti++;
 				SET *Temp = new SET;
-				*Temp = { *iti };
+				*Temp = {*iti};
 				return *Temp;
 			}
 			Pos -= THIS->IS.size();
@@ -151,7 +153,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itch++;
 				SET *Temp = new SET;
-				*Temp = { *itch };
+				*Temp = {*itch};
 				return *Temp;
 			}
 			Pos -= THIS->CHS.size();
@@ -161,7 +163,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itstr++;
 				SET *Temp = new SET;
-				*Temp = { *itstr };
+				*Temp = {*itstr};
 				return *Temp;
 			}
 			Pos -= THIS->STRS.size();
@@ -171,7 +173,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itset++;
 				SET *Temp = new SET;
-				*Temp = { *itset };
+				*Temp = {*itset};
 				return *Temp;
 			}
 			Pos -= THIS->SETS.size();
@@ -181,7 +183,7 @@ public:
 				for (int i = 0; i < Pos; i++)
 					itop++;
 				SET *Temp = new SET;
-				*Temp = { *itop };
+				*Temp = {*itop};
 				return *Temp;
 			}
 			SET *Temp = new SET;
@@ -200,7 +202,15 @@ public:
 	iterator begin() { return iterator(this, 0); }		   //返回头部迭代器
 	iterator end() { return iterator(this, (int)size()); } //返回尾部迭代器
 
-	~SET() {}; //析构函数
+	bool find(const SET &S)
+	{
+		for (SET T : *this)
+			if (T == S)
+				return true;
+		return false;
+	}
+
+	~SET(){}; //析构函数
 
 	bool operator==(const SET &S);												   //重载==
 	void operator=(const SET &S);												   //重载赋值运算
@@ -279,7 +289,7 @@ private:
 	set<SET> SETS;
 	set<ordinal_pair> OPS;
 
-	friend  class  Binary_relationship;
+	friend class Binary_relationship;
 };
 
 /************************序偶函数定义****************************/
@@ -752,10 +762,10 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type1)
 	{
 	case Int:
-		s += *I[0] * 200;
+		s += *I[0] * 212;
 		break;
 	case Char:
-		s += *CH[0] * 400;
+		s += *CH[0] * 412;
 		break;
 	case Str:
 		s = (s + STR[0]->length() + STR[0]->at(0)) * 1000;
@@ -774,10 +784,10 @@ inline size_t ordinal_pair::OPHash() const
 	switch (type2)
 	{
 	case Int:
-		s += *I[1] * 100;
+		s += *I[1] * 101;
 		break;
 	case Char:
-		s += *CH[1] * 300;
+		s += *CH[1] * 311;
 		break;
 	case Str:
 		s = (s + STR[1]->length() + STR[1]->at(0)) * 900;
@@ -915,6 +925,130 @@ ostream &operator<<(ostream &os, ordinal_pair &op)
 	// TODO: 在此处插入 return 语句
 }
 
+inline istream &operator>>(istream &in, ordinal_pair &op)
+{
+	int i1, i2;
+	in >> i1 >> i2;
+	op.type1 = types(i1);
+	op.type2 = types(i2);
+	switch (op.type1)
+	{
+	case Int:
+		op.I[0] = new int;
+		in >> *op.I[0];
+		break;
+	case Char:
+		op.CH[0] = new char;
+		in >> *op.CH[0];
+		break;
+	case Str:
+		op.STR[0] = new string;
+		in >> *op.STR[0];
+		break;
+	case Set:
+		std::cout << "type unable to input!" << endl;
+		break;
+	case Ordinal_pair:
+		std::cout << "type unable to input!" << endl;
+		break;
+	case null:
+		break;
+	default:
+		break;
+	}
+	switch (op.type2)
+	{
+	case Int:
+		op.I[1] = new int;
+		in >> *op.I[1];
+		break;
+	case Char:
+		op.CH[1] = new char;
+		in >> *op.CH[1];
+		break;
+	case Str:
+		op.STR[1] = new string;
+		in >> *op.STR[1];
+		break;
+	case Set:
+		std::cout << "type unable to input!" << endl;
+		break;
+	case Ordinal_pair:
+		std::cout << "type unable to input!" << endl;
+		break;
+	case null:
+		break;
+	default:
+		break;
+	}
+
+	return in;
+	// TODO: 在此处插入 return 语句
+}
+
+ordinal_pair ordinal_pair::anti()
+{
+	ordinal_pair t;
+	t.type1 = type2;
+	t.type2 = type1;
+	switch (type2)
+	{
+	case Int:
+		t.I[0] = new int;
+		*t.I[0] = *I[1];
+		break;
+	case Char:
+		t.CH[0] = new char;
+		*t.CH[0] = *CH[1];
+		break;
+	case Str:
+		t.STR[0] = new string;
+		*t.STR[0] = *STR[1];
+		break;
+	case Set:
+		t.SETT[0] = new SET;
+		*t.SETT[0] = *SETT[1];
+		break;
+	case Ordinal_pair:
+		t.OP[0] = new ordinal_pair;
+		*t.OP[0] = *OP[1];
+		break;
+	case null:
+		break;
+	default:
+		break;
+	}
+
+	switch (type1)
+	{
+	case Int:
+		t.I[1] = new int;
+		*t.I[1] = *I[0];
+		break;
+	case Char:
+		t.CH[1] = new char;
+		*t.CH[1] = *CH[0];
+		break;
+	case Str:
+		t.STR[1] = new string;
+		*t.STR[1] = *STR[0];
+		break;
+	case Set:
+		t.SETT[1] = new SET;
+		*t.SETT[1] = *SETT[0];
+		break;
+	case Ordinal_pair:
+		t.OP[1] = new ordinal_pair;
+		*t.OP[1] = *OP[0];
+		break;
+	case null:
+		break;
+	default:
+		break;
+	}
+	return t;
+}
+
 /********************SET函数定义***********************/
 SET::SET(const SET &S)
 {
@@ -938,9 +1072,32 @@ inline void SET::operator=(const SET &S)
 
 bool SET::operator==(const SET &S)
 {
-	if (Empty == S.Empty && IS == S.IS && CHS == S.CHS && STRS == S.STRS)
-		;
+	if (Empty == S.Empty && IS.size() == S.IS.size() && CHS.size() == S.CHS.size() && STRS.size() == S.STRS.size())
 	{
+		for (int i : IS)
+			if (S.IS.find(i) == S.IS.end())
+				return false;
+		for (int i : S.IS)
+			if (IS.find(i) == IS.end())
+				return false;
+		for (char ch : CHS)
+			if (S.IS.find(ch) == S.IS.end())
+				return false;
+		for (char ch : S.CHS)
+			if (IS.find(ch) == IS.end())
+				return false;
+		for (string str : STRS)
+			if (S.STRS.find(str) == S.STRS.end())
+				return false;
+		for (string str : S.STRS)
+			if (STRS.find(str) == STRS.end())
+				return false;
+		for (ordinal_pair op : OPS)
+			if (S.OPS.find(op) == S.OPS.end())
+				return false;
+		for (ordinal_pair op : S.OPS)
+			if (OPS.find(op) == OPS.end())
+				return false;
 		for (SET TSET : SETS)
 			if (S.SETS.find(TSET) == S.SETS.end())
 				return false;
@@ -949,6 +1106,8 @@ bool SET::operator==(const SET &S)
 				return false;
 		return true;
 	}
+	else
+		return false;
 }
 
 SET SET::operator+(const SET &S)
@@ -1298,10 +1457,10 @@ ostream &operator<<(ostream &os, SET &S)
 		os << op << ',';
 
 	if (S.Empty)
-		cout << "Empty_set";
+		os << "Empty_set";
 	else
-		cout << "\b";
-	cout << '}';
+		os << "\b";
+	os << '}';
 
 	return os;
 
