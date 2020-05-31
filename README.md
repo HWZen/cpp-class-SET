@@ -115,4 +115,8 @@ input.close()
 
 ```
 
+## 5月31日
+### 新建二元关系`Binary_relationship`分支，实现二元关系的各州概念
+* 项目进展请查看[二元关系.md](二元关系.md)
+
 [My blog](https://hwzen.myds.me:17001 "变态文春の又一个博客")
