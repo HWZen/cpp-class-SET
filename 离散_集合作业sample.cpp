@@ -1,7 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <functional>
+#include <string>
+#include <set>
 #include "离散_二元关系.h"
+using namespace std;
 //包含两个类：SET（集合）、ordinal_pair（序偶）
 //支持的数据类型：int,char,string,SET,ordinal_pair
 //支持不同类型数据混合储存
@@ -11,7 +15,7 @@
 int main()
 {
 
-#if 0
+#if 1
 	ifstream input1("input1");
 	ifstream input2("input2");
 
@@ -27,9 +31,8 @@ int main()
 	else
 		cout << "input1 open failed" << endl;
 
-	ordinal_pair op1 = { 25, "Hello,world!" };
+	ordinal_pair op1 = { 25, string("Hello,world!")};
 	cout << "op1:" << op1 << endl;
-	;
 
 	SET SET2;
 	if (input2)
@@ -37,7 +40,6 @@ int main()
 		input2 >> SET2;
 		SET2.push(op1);
 		cout << "SET2:" << SET2 << endl;
-		;
 	}
 	else
 		cout << "input2 open failed" << endl;
@@ -74,11 +76,11 @@ int main()
 	SET::iterator its = SET5.begin(); //迭代器
 	++its;
 	cout << *its << endl;
-	for (SET T : SET5)
+	for (Date T : SET5)
 		cout << T << " ";
 #endif // 集合演示
 
-#if 1
+#if 0
 	ifstream input1("input1.txt");
 	ifstream input2("input2.txt");
 	ifstream input3("input3.txt");
@@ -191,5 +193,6 @@ int main()
 
 #endif // 二元关系演示
 
+	
 	return 0;
 }
