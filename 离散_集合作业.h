@@ -97,7 +97,11 @@ public:
 		date[0] = op.date[0];
 		date[1] = op.date[1];
 	}
-	~ordinal_pair() { date[0].~Date(); date[1].~Date(); };
+	~ordinal_pair() 
+	{
+		date[0].~Date();
+		date[1].~Date(); 
+	};
 
 	//折中解决const char** 无法强制转换成string*的bug
 #if 0
@@ -350,7 +354,11 @@ public:
 		DATES.insert(*temp);
 		Empty = false;
 	};
-	inline void push(Date date) { DATES.insert(date); Empty = false; };
+	inline void push(const Date &date) 
+	{
+		DATES.insert(date);
+		Empty = false; 
+	};
 	inline void push(initializer_list<int> I)
 	{
 		for (int i : I)
@@ -738,7 +746,8 @@ bool SET::operator==(const SET &S)
 SET SET::operator+(const SET &S)
 {
 	SET Temp = S;
-	Temp.DATES.insert(DATES.begin(), DATES.end());
+	for (Date t : DATES)
+		Temp.DATES.insert(t);
 	return Temp;
 	// TODO: 在此处插入 return 语句
 }
@@ -991,9 +1000,6 @@ Date::Date(const ordinal_pair &t)
 	SETT = NULL;
 	OP = new ordinal_pair;
 	*OP = t;
-	ordinal_pair temp = t;
-	std::cout << temp;
-	std::cout << *OP;
 }
 
 int Date::operator%(const Date &date)
@@ -1225,14 +1231,12 @@ Date::~Date()
 	case Set:
 		if(SETT!=NULL)
 		{
-			delete SETT;
 			SETT = NULL;
 		}
 		break;
 	case Ordinal_pair:
 		if (OP != NULL)
 		{
-			delete OP;
 			OP = NULL;
 		}
 		break;

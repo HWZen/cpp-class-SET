@@ -15,17 +15,17 @@ using namespace std;
 int main()
 {
 
-#if 1
-	ifstream input1("input1");
-	ifstream input2("input2");
+#if 0
+	ifstream input11("input1");
+	ifstream input22("input2");
 
 	SET SET0 = {};
 	cout << "SET0:" << SET0 << endl;
 
 	SET SET1;
-	if (input1)
+	if (input11)
 	{
-		input1 >> SET1;
+		input11 >> SET1;
 		cout << "SET1:" << SET1 << endl;
 	}
 	else
@@ -35,17 +35,17 @@ int main()
 	cout << "op1:" << op1 << endl;
 
 	SET SET2;
-	if (input2)
+	if (input22)
 	{
-		input2 >> SET2;
+		input22 >> SET2;
 		SET2.push(op1);
 		cout << "SET2:" << SET2 << endl;
 	}
 	else
 		cout << "input2 open failed" << endl;
 
-	input1.close();
-	input2.close();
+	input11.close();
+	input22.close();
 
 	SET SET3 = { 1, 3, 5, 7 };
 	SET3.push({ 'H', 'l' });
@@ -80,7 +80,7 @@ int main()
 		cout << T << " ";
 #endif // 集合演示
 
-#if 0
+#if 1
 	ifstream input1("input1.txt");
 	ifstream input2("input2.txt");
 	ifstream input3("input3.txt");
@@ -193,6 +193,11 @@ int main()
 
 #endif // 二元关系演示
 
+	//ordinal_pair op1(12, string("Helllo,world!"));
+	//SET T;
+	//T.push(Date(op1));
+	//std::cout << op1 << endl;
+	//std::cout << T << endl;
 	
 	return 0;
 }
