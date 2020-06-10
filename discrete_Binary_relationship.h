@@ -1,5 +1,5 @@
 #pragma once
-#include "离散_集合作业.h"
+#include "discrete_SET.h"
 #include <algorithm>
 #include <iostream>
 
@@ -111,18 +111,18 @@ inline Binary_relationship Binary_relationship::R(const SET &S)
 	{
 		for (Date T2 : S.DATES)
 		{
-			if (T1.ty != Set || T2.ty != Set)
+			if (T1._ty != Set || T2._ty != Set)
 			{
 				std::cout << "含有非集合元素！" << endl;
 				return Binary_relationship();
 			}
-			SET::iterator it3 = T2.SETT->begin();
-			for (; it3 != T2.SETT->end(); ++it3)
+			SET::iterator it3 = T2._SETT->begin();
+			for (; it3 != T2._SETT->end(); ++it3)
 			{
-				if (T1.SETT->find(*it3)==T1.SETT->end())
+				if (T1._SETT->find(*it3)==T1._SETT->end())
 					break;
 			}
-			if (it3 == T2.SETT->end())
+			if (it3 == T2._SETT->end())
 				temp.date.push(ordinal_pair(T1, T2));
 		}
 	}
@@ -138,7 +138,7 @@ inline SET Binary_relationship::domR(const Binary_relationship &br)
 {
 	SET temp;
 	for (Date T : br.date.DATES)
-		temp.push(T.OP->date[0]);
+		temp.push(T._OP->date[0]);
 	return temp;
 }
 
@@ -146,7 +146,7 @@ inline SET Binary_relationship::ranR(const Binary_relationship &br)
 {
 	SET temp;
 	for (Date T : br.date.DATES)
-		temp.push(T.OP->date[1]);
+		temp.push(T._OP->date[1]);
 	return temp;
 }
 
@@ -176,7 +176,7 @@ inline bool Binary_relationship::Symmetry(SET S)
 {
 	Binary_relationship temp = E(S);
 	for (Date op : date.DATES)
-		if (temp.date.find(op)==temp.date.end() || date.find(Date(op.OP->anti()))==temp.date.end())
+		if (temp.date.find(op)==temp.date.end() || date.find(Date(op._OP->anti()))==temp.date.end())
 			return false;
 	return true;
 }
@@ -188,7 +188,7 @@ inline bool Binary_relationship::Antisymmetric(SET S)
 	{
 		if (temp.date.find(op)!=temp.date.end())
 		{
-			if (date.find(Date(op.OP->anti()))!=date.end() && !(*op.OP == op.OP->anti()))
+			if (date.find(Date(op._OP->anti()))!=date.end() && !(*op._OP == op._OP->anti()))
 				return false;
 		}
 		else

@@ -4,7 +4,7 @@
 #include <functional>
 #include <string>
 #include <set>
-#include "离散_二元关系.h"
+#include "discrete_Binary_relationship.h"
 using namespace std;
 //包含两个类：SET（集合）、ordinal_pair（序偶）
 //支持的数据类型：int,char,string,SET,ordinal_pair

@@ -39,9 +39,9 @@ class Date
 public:
 	Date()
 	{
-		ty = null;
-		SETT = NULL;
-		OP = NULL;
+		_ty = null;
+		_SETT = NULL;
+		_OP = NULL;
 	}
 	Date(const Date &date);
 
@@ -53,6 +53,12 @@ public:
 	Date(const string &t);
 	Date(const SET &t);
 	Date(const ordinal_pair &t);
+	int I() { return _I; };
+	char CH() { return _CH; };
+	string STR() { return _STR; };
+	SET SETT();
+	ordinal_pair OP();
+
 
 	bool operator<(const Date &date) const;
 	bool operator==(const Date &date);
@@ -75,12 +81,12 @@ public:
 	friend class Binary_relationship;
 
 private:
-	types ty;
-	int I;
-	char CH;
-	string STR;
-	SET *SETT;
-	ordinal_pair *OP;
+	types _ty;
+	int _I;
+	char _CH;
+	string _STR;
+	SET *_SETT;
+	ordinal_pair *_OP;
 
 };
 
@@ -97,20 +103,11 @@ public:
 		date[0] = op.date[0];
 		date[1] = op.date[1];
 	}
-	~ordinal_pair() 
+	~ordinal_pair() 															      //析构函数
 	{
 		date[0].~Date();
 		date[1].~Date(); 
-	};
-
-	//折中解决const char** 无法强制转换成string*的bug
-#if 0
-	template <typename T2>
-	ordinal_pair(const char *chs, T2 t2);
-
-	template <typename T1>
-	ordinal_pair(T1 t1, const char *chs);
-#endif
+	}
 
 	ordinal_pair(Date t1, Date t2)
 	{
@@ -121,7 +118,7 @@ public:
 	template <typename T1, typename T2>
 	ordinal_pair(T1 t1, T2 t2);
 
-	void operator=(const ordinal_pair &op);											   //重载赋值运算															   //析构函数
+	void operator=(const ordinal_pair &op);											   //重载赋值运算
 	bool operator==(const ordinal_pair &O);											   //重载符号==
 	bool operator<(const ordinal_pair &op) const; //重载符号<
 	friend ostream &operator<<(ostream &os, ordinal_pair &op);						   //声明重载符号<<(友元)
@@ -142,7 +139,7 @@ public:
 
 	//size_t OPHash() const; //序偶变量量化函数，用于不同序偶变量的比较
 
-private:
+protected:
 
 	/********储存分量数据，允许int,char,string,SET和序偶类型作为分量*******/
 	/*******************5月10日，全部数据用指针代替常量********************/
@@ -233,57 +230,6 @@ public:
 			{
 				++it;
 			}
-
-			/*if (Pos < THIS->IS.size())
-			{
-				set<int>::iterator iti = THIS->IS.begin();
-				for (int i = 0; i < Pos; i++)
-					iti++;
-				SET *Temp = new SET;
-				*Temp = {*iti};
-				return *Temp;
-			}
-			Pos -= THIS->IS.size();
-			if (Pos < THIS->CHS.size())
-			{
-				set<char>::iterator itch = THIS->CHS.begin();
-				for (int i = 0; i < Pos; i++)
-					itch++;
-				SET *Temp = new SET;
-				*Temp = {*itch};
-				return *Temp;
-			}
-			Pos -= THIS->CHS.size();
-			if (Pos < THIS->STRS.size())
-			{
-				set<string>::iterator itstr = THIS->STRS.begin();
-				for (int i = 0; i < Pos; i++)
-					itstr++;
-				SET *Temp = new SET;
-				*Temp = {*itstr};
-				return *Temp;
-			}
-			Pos -= THIS->STRS.size();
-			if (Pos < THIS->SETS.size())
-			{
-				set<SET>::iterator itset = THIS->SETS.begin();
-				for (int i = 0; i < Pos; i++)
-					itset++;
-				SET *Temp = new SET;
-				*Temp = {*itset};
-				return *Temp;
-			}
-			Pos -= THIS->SETS.size();
-			if (Pos < THIS->OPS.size())
-			{
-				set<ordinal_pair>::iterator itop = THIS->OPS.begin();
-				for (int i = 0; i < Pos; i++)
-					itop++;
-				SET *Temp = new SET;
-				*Temp = {*itop};
-				return *Temp;
-			}
-			SET *Temp = new SET;*/
 
 			Date *temp = new Date;
 			*temp = *it;
@@ -441,56 +387,6 @@ void ordinal_pair::operator=(const ordinal_pair &op)
 	date[1] = op.date[1];
 }
 
-
-
-//template <typename T1>
-//ordinal_pair::ordinal_pair(T1 t1, const char *chs)
-//{
-//	const type_info &SInfo = typeid(SET);
-//	const type_info &IInfo = typeid(int);
-//	const type_info &CInfo = typeid(char);
-//	const type_info &StrInfo = typeid(string);
-//	const type_info &OPInfo = typeid(ordinal_pair);
-//	const type_info &t1info = typeid(t1);
-//	T1 *tt1 = new T1;
-//	*tt1 = t1;
-//
-//	if (t1info == IInfo)
-//	{
-//		date[0].ty = Int;
-//		date[0].I = (int *)tt1;
-//	}
-//	else if (t1info == CInfo)
-//	{
-//		date[0].ty = Char;
-//		date[0].CH = (char *)tt1;
-//	}
-//	else if (t1info == StrInfo)
-//	{
-//		date[0].ty = Str;
-//		date[0].STR = (string *)tt1;
-//	}
-//	else if (t1info == SInfo)
-//	{
-//		date[0].ty = Set;
-//		date[0].SETT = (SET *)tt1;
-//	}
-//	else if (t1info == OPInfo)
-//	{
-//		date[0].ty = Ordinal_pair;
-//		date[0].OP = (ordinal_pair *)tt1;
-//	}
-//	else
-//	{
-//		cout << "不支持的数据类型：" << t1info.name() << endl;
-//		date[0].ty = null;
-//	}
-//
-//	date[1].ty = Str;
-//	date[1].STR = new string;
-//	*date[1].STR = chs;
-//}
-
 template <typename T1, typename T2>
 ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 {
@@ -498,62 +394,6 @@ ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 	date[1] = t2;
 }
 
-//template <typename T2>
-//ordinal_pair::ordinal_pair(const char *chs, T2 t2)
-//{
-//	const type_info &SInfo = typeid(SET);
-//	const type_info &IInfo = typeid(int);
-//	const type_info &CInfo = typeid(char);
-//	const type_info &StrInfo = typeid(string);
-//	const type_info &OPInfo = typeid(ordinal_pair);
-//	const type_info &t2info = typeid(t2);
-//	T2 *tt2 = new T2;
-//	*tt2 = t2;
-//	date[0].SETT = NULL;
-//	date[0].OP = NULL;
-//	date[0].I = NULL;
-//	date[0].CH = NULL;
-//	date[1].SETT = NULL;
-//	date[1].OP = NULL;
-//	date[1].I = NULL;
-//	date[1].CH = NULL;
-//	date[1].STR = NULL;
-//
-//	date[0].ty = Str;
-//	date[0].STR = new string;
-//	*date[0].STR = chs;
-//
-//	if (t2info == IInfo)
-//	{
-//		date[1].ty = Int;
-//		date[1].I = (int *)tt2;
-//	}
-//	else if (t2info == CInfo)
-//	{
-//		date[1].ty = Char;
-//		date[1].CH = (char *)tt2;
-//	}
-//	else if (t2info == StrInfo)
-//	{
-//		date[1].ty = Str;
-//		date[1].STR = (string *)tt2;
-//	}
-//	else if (t2info == SInfo)
-//	{
-//		date[1].ty = Set;
-//		date[1].SETT = (SET *)tt2;
-//	}
-//	else if (t2info == OPInfo)
-//	{
-//		date[1].ty = Ordinal_pair;
-//		date[1].OP = (ordinal_pair *)tt2;
-//	}
-//	else
-//	{
-//		cout << "不支持的数据类型：" << t2info.name() << endl;
-//		date[1].ty = null;
-//	}
-//}
 
 //inline void ordinal_pair::component1(int t)
 //{
@@ -625,56 +465,6 @@ ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 //	delete date[1].OP;
 //	date[1].OP = new ordinal_pair;
 //	*date[1].OP = t;
-//}
-
-//inline size_t ordinal_pair::OPHash() const
-//{
-//	size_t s = date[0].ty * 10000 + date[1].ty * 100000;
-//	switch (date[0].ty)
-//	{
-//	case Int:
-//		s += *date[0].I * 212;
-//		break;
-//	case Char:
-//		s += *date[0].CH * 412;
-//		break;
-//	case Str:
-//		s = (s + date[0].STR->length() + date[0].STR->at(0)) * 1000;
-//		break;
-//	case Set:
-//		s += date[0].SETT->SETHash() / 1000;
-//		break;
-//	case Ordinal_pair:
-//		s += date[0].OP->OPHash() / 200;
-//		break;
-//	case null:
-//		break;
-//	default:
-//		break;
-//	}
-//	switch (date[1].ty)
-//	{
-//	case Int:
-//		s += *date[1].I * 101;
-//		break;
-//	case Char:
-//		s += *date[1].CH * 311;
-//		break;
-//	case Str:
-//		s = (s + date[1].STR->length() + date[1].STR->at(0)) * 900;
-//		break;
-//	case Set:
-//		s += date[1].SETT->SETHash() / 900;
-//		break;
-//	case Ordinal_pair:
-//		s += date[1].OP->OPHash() / 100;
-//		break;
-//	case null:
-//		break;
-//	default:
-//		break;
-//	}
-//	return s;
 //}
 
 bool ordinal_pair::operator==(const ordinal_pair &op)
@@ -918,241 +708,213 @@ inline bool SET::operator<(const SET &S) const
 	return hash<SET>()(*this) < hash<SET>()(S); 
 }
 
-//size_t SET::SETHash() const
-//{
-//	size_t s = size() * 100000;
-//	set<int>::iterator isi = IS.begin();
-//	set<char>::iterator chsi = CHS.begin();
-//	set<string>::iterator strsi = STRS.begin();
-//	set<SET>::iterator setsi = SETS.begin();
-//	set<ordinal_pair>::iterator opsi = OPS.begin();
-//	for (int i = 1; i <= IS.size(); i++)
-//	{
-//		s += *isi * i * 100;
-//		isi++;
-//	}
-//	for (int i = 1; i <= CHS.size(); i++)
-//	{
-//		s += *chsi * i * 1000;
-//		chsi++;
-//	}
-//	for (int i = 1; i <= STRS.size(); i++)
-//	{
-//		s += (strsi->length() + strsi->at(0)) * i * 10000;
-//		isi++;
-//	}
-//	for (int i = 1; i <= SETS.size(); i++)
-//	{
-//		s += setsi->SETHash() / 5000 * i;
-//		setsi++;
-//	}
-//	for (int i = 1; i <= OPS.size(); i++)
-//	{
-//		s += opsi->OPHash() / 10000 * i;
-//		opsi++;
-//	}
-//	return s;
-//}
-
-
 
 /*****************Date函数定义******************/
 
 
 Date::Date(const char *chs)
 {
-	ty = Str;
-	SETT = NULL;
-	OP = NULL;
-	STR = chs;
+	_ty = Str;
+	_SETT = NULL;
+	_OP = NULL;
+	_STR = chs;
 }
 Date::Date(const int &t)
 {
-	ty = Int;
-	I = t;
-	SETT = NULL;
-	OP = NULL;
+	_ty = Int;
+	_I = t;
+	_SETT = NULL;
+	_OP = NULL;
 }
 Date::Date(const char &t)
 {
-	ty = Char;
-	CH = t;
-	SETT = NULL;
-	OP = NULL;
+	_ty = Char;
+	_CH = t;
+	_SETT = NULL;
+	_OP = NULL;
 }
 Date::Date(const string &t)
 {
-	ty = Str;
-	STR = t;
-	SETT = NULL;
-	OP = NULL;
+	_ty = Str;
+	_STR = t;
+	_SETT = NULL;
+	_OP = NULL;
 }
 Date::Date(const SET &t)
 {
-	ty = Set;
-	SETT = new SET;
-	*SETT = t;
-	OP = NULL;
+	_ty = Set;
+	_SETT = new SET;
+	*_SETT = t;
+	_OP = NULL;
 }
 Date::Date(const ordinal_pair &t)
 {
-	ty = Ordinal_pair;
-	SETT = NULL;
-	OP = new ordinal_pair;
-	*OP = t;
+	_ty = Ordinal_pair;
+	_SETT = NULL;
+	_OP = new ordinal_pair;
+	*_OP = t;
+}
+
+inline SET Date::SETT()
+{
+	return *_SETT;
+}
+inline ordinal_pair Date::OP()
+{
+	return *_OP;
 }
 
 int Date::operator%(const Date &date)
 {
-	if (ty != Int || date.ty != Int)
+	if (_ty != Int || date._ty != Int)
 		return -1;
 	else
-		return I % date.I;
+		return _I % date._I;
 }
 
 void Date::operator=(const char *t)
 {
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		if (SETT != NULL)
-			delete SETT;
-		SETT = NULL;
+		if (_SETT != NULL)
+			delete _SETT;
+		_SETT = NULL;
 		break;
 	case Ordinal_pair:
-		if (OP != NULL)
-			delete OP;
-		OP = NULL;
+		if (_OP != NULL)
+			delete _OP;
+		_OP = NULL;
 		break;
 	case null:
 		break;
 	default:
 		break;
 	}
-	ty = Str;
-	STR = t;
+	_ty = Str;
+	_STR = t;
 }
 void Date::operator=(const int &t)
 {
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		delete SETT;
-		SETT = NULL;
+		delete _SETT;
+		_SETT = NULL;
 		break;
 	case Ordinal_pair:
-		delete OP;
-		OP = NULL;
+		delete _OP;
+		_OP = NULL;
 		break;
 	case null:
 		break;
 	default:
 		break;
 	}
-	ty = Int;
-	I = t;
+	_ty = Int;
+	_I = t;
 }
 void Date::operator=(const char &t)
 {
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		delete SETT;
-		SETT = NULL;
+		delete _SETT;
+		_SETT = NULL;
 		break;
 	case Ordinal_pair:
-		delete OP;
-		OP = NULL;
+		delete _OP;
+		_OP = NULL;
 		break;
 	case null:
 		break;
 	default:
 		break;
 	}
-	ty = Char;
-	CH = t;
+	_ty = Char;
+	_CH = t;
 }
 void Date::operator=(const string &t)
 {
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		delete SETT;
-		SETT = NULL;
+		delete _SETT;
+		_SETT = NULL;
 		break;
 	case Ordinal_pair:
-		delete OP;
-		OP = NULL;
+		delete _OP;
+		_OP = NULL;
 		break;
 	case null:
 		break;
 	default:
 		break;
 	}
-	ty = Str;
-	STR = t;
+	_ty = Str;
+	_STR = t;
 }
 void Date::operator=(const SET &t)
 {
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		delete SETT;
-		SETT = NULL;
+		delete _SETT;
+		_SETT = NULL;
 		break;
 	case Ordinal_pair:
-		delete OP;
-		OP = NULL;
+		delete _OP;
+		_OP = NULL;
 		break;
 	case null:
 		break;
 	default:
 		break;
 	}
-	ty = Set;
-	SETT = new SET;
-	*SETT = t;
+	_ty = Set;
+	_SETT = new SET;
+	*_SETT = t;
 }
 void Date::operator=(const ordinal_pair &t)
 {
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		delete SETT;
-		SETT = NULL;
+		delete _SETT;
+		_SETT = NULL;
 		break;
 	case Ordinal_pair:
-		delete OP;
-		OP = NULL;
+		delete _OP;
+		_OP = NULL;
 		break;
 	case null:
 		break;
 	default:
 		break;
 	}
-	ty = Int;
-	OP = new ordinal_pair;
-	*OP = t;
+	_ty = Int;
+	_OP = new ordinal_pair;
+	*_OP = t;
 }
 
 ostream & operator<<(ostream & os, Date & date)
 {
-	switch (date.ty)
+	switch (date._ty)
 	{
 	case Int:
-		os << date.I;
+		os << date._I;
 		break;
 	case Char:
-		os << date.CH;
+		os << date._CH;
 		break;
 	case Str:
-		os << date.STR;
+		os << date._STR;
 		break;
 	case Set:
-		os << *date.SETT;
+		os << *date._SETT;
 		break;
 	case Ordinal_pair:
-		os << *date.OP;
+		os << *date._OP;
 		break;
 	case null:
 		os << "null";
@@ -1170,23 +932,23 @@ inline istream & operator>>(istream & is, Date & date)
 	switch (types(i))
 	{
 	case Int:
-		date.ty = Int;
-		is >> date.I;
+		date._ty = Int;
+		is >> date._I;
 		break;
 	case Char:
-		date.ty = Char;
-		is >> date.CH;
+		date._ty = Char;
+		is >> date._CH;
 		break;
 	case Str:
-		date.ty = Str;
-		is >> date.STR;
+		date._ty = Str;
+		is >> date._STR;
 		break;
 	case null:
-		date.ty = null;
+		date._ty = null;
 		break;
 	default:
-		/*std::cout << "暂不支持的格式： " << types(i);*/
-		date.ty = null;
+		/*std::cout << "暂不支持的格式： " << _types(i);*/
+		date._ty = null;
 		break;
 	}
 	return is;
@@ -1195,26 +957,26 @@ inline istream & operator>>(istream & is, Date & date)
 
 Date::Date(const Date &date)
 {
-	ty = date.ty;
-	SETT = NULL;
-	OP = NULL;
-	switch (ty)
+	_ty = date._ty;
+	_SETT = NULL;
+	_OP = NULL;
+	switch (_ty)
 	{
 	case Int:
-		I = date.I;
+		_I = date._I;
 		break;
 	case Char:
-		CH = date.CH;
+		_CH = date._CH;
 		break;
 	case Str:
-		STR = date.STR;
+		_STR = date._STR;
 		break;
 	case Set:
-		SETT = new SET;
-		*SETT = *date.SETT;
+		_SETT = new SET;
+		*_SETT = *date._SETT;
 		break;
 	case Ordinal_pair:
-		OP = date.OP;
+		_OP = date._OP;
 		break;
 	case null:
 		break;
@@ -1226,18 +988,18 @@ Date::Date(const Date &date)
 Date::~Date()
 {
 
-	switch (ty)
+	switch (_ty)
 	{
 	case Set:
-		if(SETT!=NULL)
+		if(_SETT!=NULL)
 		{
-			SETT = NULL;
+			_SETT = NULL;
 		}
 		break;
 	case Ordinal_pair:
-		if (OP != NULL)
+		if (_OP != NULL)
 		{
-			OP = NULL;
+			_OP = NULL;
 		}
 		break;
 	case null:
@@ -1249,24 +1011,24 @@ Date::~Date()
 
 bool Date::operator==(const Date &date)
 {
-	if (ty == date.ty)
+	if (_ty == date._ty)
 	{
-		switch (ty)
+		switch (_ty)
 		{
 		case Int:
-			return I == date.I;
+			return _I == date._I;
 			break;
 		case Char:
-			return CH == date.CH;
+			return _CH == date._CH;
 			break;
 		case Str:
-			return STR == date.STR;
+			return _STR == date._STR;
 			break;
 		case Set:
-			return *SETT == *date.SETT;
+			return *_SETT == *date._SETT;
 			break;
 		case Ordinal_pair:
-			return *OP == *date.OP;
+			return *_OP == *date._OP;
 			break;
 		case null:
 			return true;
@@ -1291,24 +1053,24 @@ size_t hash<Date>::operator()(const Date &date) const
 {
 	if (&date == NULL)
 		return 0;
-	size_t h1 = hash<types>()(date.ty);
+	size_t h1 = hash<types>()(date._ty);
 	size_t h2;
-	switch (date.ty)
+	switch (date._ty)
 	{
 	case Int:
-		h2 = date.I;
+		h2 = date._I;
 		break;
 	case Char:
-		h2 = date.CH;
+		h2 = date._CH;
 		break;
 	case Str:
-		h2 = hash<string>()(date.STR);
+		h2 = hash<string>()(date._STR);
 		break;
 	case Set:
-		h2 = hash<SET>()(*date.SETT);
+		h2 = hash<SET>()(*date._SETT);
 		break;
 	case Ordinal_pair:
-		h2 = hash<ordinal_pair>()(*date.OP);
+		h2 = hash<ordinal_pair>()(*date._OP);
 		break;
 	case null:
 		h2 = 100;
