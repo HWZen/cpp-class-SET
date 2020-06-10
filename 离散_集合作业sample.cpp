@@ -15,7 +15,7 @@ using namespace std;
 int main()
 {
 
-#if 0
+#if 1
 	ifstream input11("input1");
 	ifstream input22("input2");
 
@@ -104,15 +104,15 @@ int main()
 	Binary_relationship BR1(S1);	 //S1上的二元关系
 	Binary_relationship BR2(S1, S2); //S1到S2的二元关系
 	Binary_relationship BR3, BR4, BR5, BR6, BR7;
-	SET SET8, SET9, SET10;
+	SET SET10, SET11, SET12;
 	BR3 = Binary_relationship::E(S1);		  //全域
 	BR4 = Binary_relationship::I(S1);		  //恒等
 	BR5 = Binary_relationship::L(S1);		  //小于或等于
 	BR6 = Binary_relationship::D(S2);		  //整除
 	BR7 = Binary_relationship::R(S1.power()); //包含
-	SET8 = Binary_relationship::domR(BR6);	  //定义域
-	SET9 = Binary_relationship::ranR(BR6);	  //值域
-	SET10 = Binary_relationship::fldR(BR6);	  //并集
+	SET10 = Binary_relationship::domR(BR6);	  //定义域
+	SET11 = Binary_relationship::ranR(BR6);	  //值域
+	SET12 = Binary_relationship::fldR(BR6);	  //并集
 
 	Binary_relationship BR11, BR12, BR13;
 
@@ -159,11 +159,11 @@ int main()
 			  << endl
 			  << "BR7:" << BR7 << endl
 			  << endl
-			  << "SET8:" << SET8 << endl
-			  << endl
-			  << "SET9:" << SET9 << endl
-			  << endl
 			  << "SET10:" << SET10 << endl
+			  << endl
+			  << "SET11:" << SET11 << endl
+			  << endl
+			  << "SET12:" << SET12 << endl
 			  << endl
 			  //自反、反自反
 			  << "BR11自反？ " << BR11.Reflexive(S1) << endl

@@ -1289,6 +1289,8 @@ bool Date::operator<(const Date &date) const
 
 size_t hash<Date>::operator()(const Date &date) const
 {
+	if (&date == NULL)
+		return 0;
 	size_t h1 = hash<types>()(date.ty);
 	size_t h2;
 	switch (date.ty)
@@ -1318,6 +1320,8 @@ size_t hash<Date>::operator()(const Date &date) const
 
 size_t hash<ordinal_pair>::operator()(const ordinal_pair &op)const
 {
+	if (&op == NULL)
+		return 0;
 	size_t h1 = hash<Date>()(op.date[0]);
 	size_t h2 = hash<Date>()(op.date[1]);
 	return h1 ^ (h2 << 2);
@@ -1325,6 +1329,8 @@ size_t hash<ordinal_pair>::operator()(const ordinal_pair &op)const
 
 size_t hash<SET>::operator()(const SET &SETT)const
 {
+	if (SETT.DATES.size() == 0)
+		return 1;
 	size_t h = hash<Date>()(*SETT.DATES.begin());
 	for (Date t : SETT.DATES)
 		h = hash<size_t>()(h ^ (hash<Date>()(t) << 2));

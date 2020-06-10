@@ -119,13 +119,11 @@ inline Binary_relationship Binary_relationship::R(const SET &S)
 			SET::iterator it3 = T2.SETT->begin();
 			for (; it3 != T2.SETT->end(); ++it3)
 			{
-				if (T1.SETT->find(*it3)!=T1.SETT->end())
+				if (T1.SETT->find(*it3)==T1.SETT->end())
 					break;
-				else
-					temp.date.push(ordinal_pair(T1, T2));
-
 			}
-				
+			if (it3 == T2.SETT->end())
+				temp.date.push(ordinal_pair(T1, T2));
 		}
 	}
 	return temp;
