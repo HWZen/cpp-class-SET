@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
+
 class Binary_relationship
 {
 public:
@@ -23,14 +24,14 @@ public:
 	bool Anti_reflexive(const SET &S);						//反自反
 	bool Symmetry(SET S);									//对称
 	bool Antisymmetric(SET S);								//反对称
-	void Transfer(SET S) {}									//传递
+	void Transfer(SET S) {};					//传递
 
 	~Binary_relationship(); //析构
 
 	friend ostream &operator<<(ostream &os, Binary_relationship &BR); //输出流<<重载
 
 private:
-	SET Date;
+	SET date;
 };
 
 Binary_relationship::Binary_relationship()
@@ -39,84 +40,90 @@ Binary_relationship::Binary_relationship()
 
 inline Binary_relationship::Binary_relationship(initializer_list<ordinal_pair> op)
 {
-	Date.push(op);
+	date.push(op);
 }
 
 inline void Binary_relationship::push(const ordinal_pair &op)
 {
-	Date.push(op);
+	date.push(op);
 }
 
 inline Binary_relationship::Binary_relationship(SET &S)
 {
-	Date = S * S;
+	date = S * S;
 }
 
 inline Binary_relationship Binary_relationship::E(SET &S)
 {
 	Binary_relationship Temp;
-	Temp.Date = S * S;
+	Temp.date = S * S;
 	return Temp;
 }
 
 inline Binary_relationship Binary_relationship::I(const SET &S)
 {
 	Binary_relationship temp;
-	for (int i : S.IS)
-		temp.Date.push(ordinal_pair(i, i));
-	for (char ch : S.CHS)
-		temp.Date.push(ordinal_pair(ch, ch));
+	for (Date date : S.DATES)
+		temp.date.push(ordinal_pair(date, date));
+	/*for (char ch : S.CHS)
+		temp.date.push(ordinal_pair(ch, ch));
 	for (string s : S.STRS)
-		temp.Date.push(ordinal_pair(s, s));
+		temp.date.push(ordinal_pair(s, s));
 	for (SET T : S.SETS)
-		temp.Date.push(ordinal_pair(T, T));
+		temp.date.push(ordinal_pair(T, T));
 	for (ordinal_pair op : S.OPS)
-		temp.Date.push(ordinal_pair(op, op));
+		temp.date.push(ordinal_pair(op, op));*/
 	return temp;
 }
 
 inline Binary_relationship Binary_relationship::L(const SET &S)
 {
 	Binary_relationship temp;
-	if (S.CHS.size() > 0 || S.STRS.size() > 0 || S.SETS.size() > 0 || S.OPS.size() > 0 || S.IS.size() == 0)
-		return Binary_relationship();
+	/*if (S.CHS.size() > 0 || S.STRS.size() > 0 || S.SETS.size() > 0 || S.OPS.size() > 0 || S.IS.size() == 0)
+		return Binary_relationship();*/
 
-	for (int i1 : S.IS)
-		for (int i2 : S.IS)
-			if (i1 <= i2)
-				temp.Date.push(ordinal_pair(i1, i2));
+	for (Date i1 : S.DATES)
+		for (Date i2 : S.DATES)
+			if (i1 < i2 || i1 == i2)
+				temp.date.push(ordinal_pair(i1, i2));
 	return temp;
 }
 
 inline Binary_relationship Binary_relationship::D(const SET &S)
 {
 	Binary_relationship temp;
-	if (S.CHS.size() > 0 || S.STRS.size() > 0 || S.SETS.size() > 0 || S.OPS.size() > 0 || S.IS.size() == 0)
-		return Binary_relationship();
-	for (int i1 : S.IS)
-		for (int i2 : S.IS)
+	/*if (S.CHS.size() > 0 || S.STRS.size() > 0 || S.SETS.size() > 0 || S.OPS.size() > 0 || S.IS.size() == 0)
+		return Binary_relationship();*/
+	for (Date i1 : S.DATES)
+		for (Date i2 : S.DATES)
 			if (i2 % i1 == 0)
-				temp.Date.push(ordinal_pair(i1, i2));
+				temp.date.push(ordinal_pair(i1, i2));
 	return temp;
 }
 
 inline Binary_relationship Binary_relationship::R(const SET &S)
 {
 	Binary_relationship temp;
-	if (S.CHS.size() > 0 || S.STRS.size() > 0 || S.OPS.size() > 0 || S.IS.size() > 0 || S.SETS.size() == 0)
-		return Binary_relationship();
-	for (SET T1 : S.SETS)
+	/*if (S.CHS.size() > 0 || S.STRS.size() > 0 || S.OPS.size() > 0 || S.IS.size() > 0 || S.SETS.size() == 0)
+		return Binary_relationship();*/
+	
+	for (Date T1 : S.DATES)
 	{
-		for (SET T2 : S.SETS)
+		for (Date T2 : S.DATES)
 		{
-			SET::iterator it3 = T2.begin();
-			for (; it3 != T2.end(); ++it3)
+			if (T1.ty != Set || T2.ty != Set)
 			{
-				if (!T1.find(*it3))
+				std::cout << "含有非集合元素！" << endl;
+				return Binary_relationship();
+			}
+			SET::iterator it3 = T2.SETT->begin();
+			for (; it3 != T2.SETT->end(); ++it3)
+			{
+				if (T1.SETT->find(*it3)==T1.SETT->end())
 					break;
 			}
-			if (it3 == T2.end())
-				temp.Date.push(ordinal_pair(T1, T2));
+			if (it3 == T2.SETT->end())
+				temp.date.push(ordinal_pair(T1, T2));
 		}
 	}
 	return temp;
@@ -124,60 +131,22 @@ inline Binary_relationship Binary_relationship::R(const SET &S)
 
 inline Binary_relationship::Binary_relationship(SET &S1, SET &S2)
 {
-	Date = S1 * S2;
+	date = S1 * S2;
 }
 
 inline SET Binary_relationship::domR(const Binary_relationship &br)
 {
 	SET temp;
-	for (ordinal_pair T : br.Date.OPS)
-		switch (T.type1)
-		{
-		case Int:
-			temp.push(*T.I[0]);
-			break;
-		case Char:
-			temp.push(*T.CH[0]);
-			break;
-		case Str:
-			temp.push(*T.STR[0]);
-			break;
-		case Set:
-			temp.push(*T.SETT[0]);
-			break;
-		case Ordinal_pair:
-			temp.push(*T.OP[0]);
-			break;
-		default:
-			break;
-		}
+	for (Date T : br.date.DATES)
+		temp.push(T.OP->date[0]);
 	return temp;
 }
 
 inline SET Binary_relationship::ranR(const Binary_relationship &br)
 {
 	SET temp;
-	for (ordinal_pair T : br.Date.OPS)
-		switch (T.type2)
-		{
-		case Int:
-			temp.push(*T.I[1]);
-			break;
-		case Char:
-			temp.push(*T.CH[1]);
-			break;
-		case Str:
-			temp.push(*T.STR[1]);
-			break;
-		case Set:
-			temp.push(*T.SETT[1]);
-			break;
-		case Ordinal_pair:
-			temp.push(*T.OP[1]);
-			break;
-		default:
-			break;
-		}
+	for (Date T : br.date.DATES)
+		temp.push(T.OP->date[1]);
 	return temp;
 }
 
@@ -189,51 +158,25 @@ inline SET Binary_relationship::fldR(const Binary_relationship &br)
 
 inline bool Binary_relationship::Reflexive(const SET &S)
 {
-	for (int i : S.IS)
-		if (!Date.find(SET({ordinal_pair(i, i)})))
+	for (Date i : S.DATES)
+		if (date.find(Date(ordinal_pair(i, i)))==date.end())
 			return false;
-	for (char i : S.CHS)
-		if (!Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-	for (string i : S.STRS)
-		if (!Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-	for (SET i : S.SETS)
-		if (!Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-	for (ordinal_pair i : S.OPS)
-		if (!Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-
 	return true;
 }
 
 inline bool Binary_relationship::Anti_reflexive(const SET &S)
 {
-	for (int i : S.IS)
-		if (Date.find(SET({ordinal_pair(i, i)})))
+	for (Date i : S.DATES)
+		if (date.find(Date(ordinal_pair(i, i))) != date.end())
 			return false;
-	for (char i : S.CHS)
-		if (Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-	for (string i : S.STRS)
-		if (Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-	for (SET i : S.SETS)
-		if (Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-	for (ordinal_pair i : S.OPS)
-		if (Date.find(SET({ordinal_pair(i, i)})))
-			return false;
-
 	return true;
 }
 
 inline bool Binary_relationship::Symmetry(SET S)
 {
 	Binary_relationship temp = E(S);
-	for (ordinal_pair op : Date.OPS)
-		if (!temp.Date.find({op}) || !Date.find({op.anti()}))
+	for (Date op : date.DATES)
+		if (temp.date.find(op)==temp.date.end() || date.find(Date(op.OP->anti()))==temp.date.end())
 			return false;
 	return true;
 }
@@ -241,11 +184,11 @@ inline bool Binary_relationship::Symmetry(SET S)
 inline bool Binary_relationship::Antisymmetric(SET S)
 {
 	Binary_relationship temp = E(S);
-	for (ordinal_pair op : Date.OPS)
+	for (Date op : date.DATES)
 	{
-		if (temp.Date.find({op}))
+		if (temp.date.find(op)!=temp.date.end())
 		{
-			if (Date.find({op.anti()}) && !(op == op.anti()))
+			if (date.find(Date(op.OP->anti()))!=date.end() && !(*op.OP == op.OP->anti()))
 				return false;
 		}
 		else
@@ -260,7 +203,7 @@ inline Binary_relationship::~Binary_relationship()
 
 ostream &operator<<(ostream &os, Binary_relationship &BR)
 {
-	os << BR.Date;
+	os << BR.date;
 	// TODO: 在此处插入 return 语句
 	return os;
 }

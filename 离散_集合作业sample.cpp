@@ -1,7 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <functional>
+#include <string>
+#include <set>
 #include "离散_二元关系.h"
+using namespace std;
 //包含两个类：SET（集合）、ordinal_pair（序偶）
 //支持的数据类型：int,char,string,SET,ordinal_pair
 //支持不同类型数据混合储存
@@ -11,39 +15,37 @@
 int main()
 {
 
-#if 0
-	ifstream input1("input1");
-	ifstream input2("input2");
+#if 1
+	ifstream input11("input1");
+	ifstream input22("input2");
 
 	SET SET0 = {};
 	cout << "SET0:" << SET0 << endl;
 
 	SET SET1;
-	if (input1)
+	if (input11)
 	{
-		input1 >> SET1;
+		input11 >> SET1;
 		cout << "SET1:" << SET1 << endl;
 	}
 	else
 		cout << "input1 open failed" << endl;
 
-	ordinal_pair op1 = { 25, "Hello,world!" };
+	ordinal_pair op1 = { 25, string("Hello,world!")};
 	cout << "op1:" << op1 << endl;
-	;
 
 	SET SET2;
-	if (input2)
+	if (input22)
 	{
-		input2 >> SET2;
+		input22 >> SET2;
 		SET2.push(op1);
 		cout << "SET2:" << SET2 << endl;
-		;
 	}
 	else
 		cout << "input2 open failed" << endl;
 
-	input1.close();
-	input2.close();
+	input11.close();
+	input22.close();
 
 	SET SET3 = { 1, 3, 5, 7 };
 	SET3.push({ 'H', 'l' });
@@ -74,7 +76,7 @@ int main()
 	SET::iterator its = SET5.begin(); //迭代器
 	++its;
 	cout << *its << endl;
-	for (SET T : SET5)
+	for (Date T : SET5)
 		cout << T << " ";
 #endif // 集合演示
 
@@ -102,15 +104,15 @@ int main()
 	Binary_relationship BR1(S1);	 //S1上的二元关系
 	Binary_relationship BR2(S1, S2); //S1到S2的二元关系
 	Binary_relationship BR3, BR4, BR5, BR6, BR7;
-	SET SET8, SET9, SET10;
+	SET SET10, SET11, SET12;
 	BR3 = Binary_relationship::E(S1);		  //全域
 	BR4 = Binary_relationship::I(S1);		  //恒等
 	BR5 = Binary_relationship::L(S1);		  //小于或等于
 	BR6 = Binary_relationship::D(S2);		  //整除
 	BR7 = Binary_relationship::R(S1.power()); //包含
-	SET8 = Binary_relationship::domR(BR6);	  //定义域
-	SET9 = Binary_relationship::ranR(BR6);	  //值域
-	SET10 = Binary_relationship::fldR(BR6);	  //并集
+	SET10 = Binary_relationship::domR(BR6);	  //定义域
+	SET11 = Binary_relationship::ranR(BR6);	  //值域
+	SET12 = Binary_relationship::fldR(BR6);	  //并集
 
 	Binary_relationship BR11, BR12, BR13;
 
@@ -157,11 +159,11 @@ int main()
 			  << endl
 			  << "BR7:" << BR7 << endl
 			  << endl
-			  << "SET8:" << SET8 << endl
-			  << endl
-			  << "SET9:" << SET9 << endl
-			  << endl
 			  << "SET10:" << SET10 << endl
+			  << endl
+			  << "SET11:" << SET11 << endl
+			  << endl
+			  << "SET12:" << SET12 << endl
 			  << endl
 			  //自反、反自反
 			  << "BR11自反？ " << BR11.Reflexive(S1) << endl
@@ -191,5 +193,11 @@ int main()
 
 #endif // 二元关系演示
 
+	//ordinal_pair op1(12, string("Helllo,world!"));
+	//SET T;
+	//T.push(Date(op1));
+	//std::cout << op1 << endl;
+	//std::cout << T << endl;
+	
 	return 0;
 }
