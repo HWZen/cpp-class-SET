@@ -119,4 +119,14 @@ input.close()
 ### 新建二元关系`Binary_relationship`分支，实现二元关系的各州概念
 * 项目进展请查看[二元关系.md](二元关系.md)
 
+
+# 6月5日到6月10日
+## 新建分支Refactoring用于代码重构
+### 重构内容：数据储存方式、使用真·hash对数据进行量化
+* 新建类`Date`，封装`int`,`char`,`string`,`class SET`,`class ordinal_pair`五种数据类型。
+* 减少指针的使用，防止出错。
+* 数据的构造、析构转移给`Date`，减少其他类的代码量。
+* 使用纯真hash运算，数据识别更精确
+
+
 [My blog](https://hwzen.myds.me:17001 "变态文春の又一个博客")
