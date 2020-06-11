@@ -33,3 +33,7 @@
 .vscode/*.json
 *ilk
 *pdb
+
+# CMake Build Files
+build
+CMakeLists.txt
