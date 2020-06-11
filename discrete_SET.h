@@ -4,11 +4,13 @@
 #include <string>
 #include <algorithm>
 using namespace std;
-
+/***********类声明**************************************************************************************************************************/
 class SET;											//SET类声明
 class ordinal_pair;									//序偶类声明
 class Date;
+class MSET;
 
+/***********hash结构体声明******************************************************************************************************************/
 template<>
 struct hash<Date>;
 
@@ -16,11 +18,16 @@ template<>
 struct hash<SET>;
 
 template<>
+struct hash<MSET>;
+
+template<>
 struct hash<ordinal_pair>;
 
+/***********输出流重载声明******************************************************************************************************************/
 ostream &operator<<(ostream &os, SET &S);			//SET类重载<<声明
+ostream &operator<<(ostream &os, MSET &S);			//MSET类重载<<声明
 ostream &operator<<(ostream &os, ordinal_pair &op); //序偶类重载<<声明
-ostream &operator<<(ostream &os, Date &date);
+ostream &operator<<(ostream &os, Date &date);		//Date类重载<<声明
 
 
 
@@ -30,10 +37,13 @@ enum types											//枚举类型定义声明
 	Char,
 	Str,
 	Set,
+	MSet,
 	Ordinal_pair,
 	null
 };
 
+
+/************Date完整声明*******************************************************************************************************************/
 class Date
 {
 public:
@@ -52,11 +62,14 @@ public:
 	Date(const char &t);
 	Date(const string &t);
 	Date(const SET &t);
+	Date(const MSET &t);
 	Date(const ordinal_pair &t);
+	types ty() { return _ty; };
 	int I() { return _I; };
 	char CH() { return _CH; };
 	string STR() { return _STR; };
 	SET SETT();
+	MSET MSETT();
 	ordinal_pair OP();
 
 
@@ -69,6 +82,7 @@ public:
 	void operator=(const char &t);
 	void operator=(const string &t);
 	void operator=(const SET &t);
+	void operator=(const MSET &t);
 	void operator=(const ordinal_pair &t);
 
 	
@@ -86,11 +100,12 @@ private:
 	char _CH;
 	string _STR;
 	SET *_SETT;
+	MSET *_MSETT;
 	ordinal_pair *_OP;
 
 };
 
-/************序偶完整声明**************/
+/************序偶完整声明*******************************************************************************************************************/
 class ordinal_pair
 {
 public:
@@ -114,6 +129,9 @@ public:
 		date[0] = t1;
 		date[1] = t2;
 	}
+
+	Date date1() { return date[0]; };
+	Date date2() { return date[1]; };
 
 	template <typename T1, typename T2>
 	ordinal_pair(T1 t1, T2 t2);
@@ -156,7 +174,7 @@ protected:
 	
 };
 
-/**************SET完整声明****************/
+/**************SET完整声明******************************************************************************************************************/
 class SET
 {
 public:
@@ -208,12 +226,12 @@ public:
 
 		bool operator!=(iterator it) //重载!=
 		{
-			return (this->pos != it.pos) || (this->THIS != it.THIS);
+			return (this->pos != it.pos) || (!(*this->THIS == *it.THIS));
 		}
 
 		bool operator==(iterator it) //重载==
 		{
-			return (this->pos == it.pos) && (this->THIS == it.THIS);
+			return (this->pos == it.pos) && (*this->THIS == *it.THIS);
 		}
 
 		iterator operator++() //重载++
@@ -294,6 +312,7 @@ public:
 		DATES.insert(Date(Set));
 		Empty = false;
 	};
+	inline void push(MSET Set);
 	inline void push(ordinal_pair op)
 	{
 		Date *temp = new Date(op);
@@ -329,6 +348,7 @@ public:
 			DATES.insert(Date(T));
 		Empty = false;
 	};
+	inline void push(initializer_list<MSET> SETT);
 	inline void push(initializer_list<ordinal_pair> op)
 	{
 		for (ordinal_pair OP : op)
@@ -340,24 +360,211 @@ private:
 	bool Empty; //是否包含空集
 
 	/*储存元素数据，允许int,char,string,SET和序偶类型作为元素*/
-	//set<int> IS;
-	//set<char> CHS;
-	//set<string> STRS;
-	//set<SET> SETS;
-	//set<ordinal_pair> OPS;
 
 	set<Date> DATES;
 
 	friend class Binary_relationship;
 
 	friend struct hash<Date>;
-
 	friend struct hash<SET>;
-
+	friend struct hash<MSET>;
 	friend struct hash<ordinal_pair>;
 };
 
-/****************hash完整声明****************/
+/**************MSET完整声明*****************************************************************************************************************/
+class MSET
+{
+public:
+	MSET() { Empty = true; };
+	MSET(const MSET &MS) { Empty = MS.Empty; DATES = MS.DATES; };
+	MSET(initializer_list<Date>date)
+	{
+		DATES.insert(date);
+	};
+	MSET(initializer_list<int> I)
+	{
+		for (int i : I)
+			DATES.insert(Date(i));
+		Empty = false;
+	};
+	MSET(initializer_list<char> ch)
+	{
+		for (char CH : ch)
+			DATES.insert(Date(CH));
+		Empty = false;
+	};
+	MSET(initializer_list<string> str)
+	{
+		for (string STR : str)
+			DATES.insert(Date(STR));
+		Empty = false;
+	};
+	MSET(initializer_list<ordinal_pair> op)
+	{
+		for (ordinal_pair OP : op)
+			DATES.insert(Date(OP));
+		Empty = false;
+	};
+	MSET(initializer_list<SET> SETS)
+	{
+		for (SET sets : SETS)
+			DATES.insert(Date(sets));
+		Empty = false;
+	};
+
+	~MSET() {};
+
+	/*****************添加元素函数（5重载）*******************/
+	inline void push(int I)
+	{
+		DATES.insert(Date(I));
+		Empty = false;
+	};
+	inline void push(char ch)
+	{
+		DATES.insert(Date(ch));
+		Empty = false;
+	};
+	inline void push(string str)
+	{
+		DATES.insert(Date(str));
+		Empty = false;
+	};
+	inline void push(SET Set)
+	{
+		DATES.insert(Date(Set));
+		Empty = false;
+	};
+	inline void push(MSET Set)
+	{
+		DATES.insert(Date(Set));
+		Empty = false;
+	};
+	inline void push(ordinal_pair op)
+	{
+		Date *temp = new Date(op);
+		DATES.insert(*temp);
+		Empty = false;
+	};
+	inline void push(const Date &date)
+	{
+		DATES.insert(date);
+		Empty = false;
+	};
+	inline void push(initializer_list<int> I)
+	{
+		for (int i : I)
+			DATES.insert(Date(i));
+		Empty = false;
+	};
+	inline void push(initializer_list<char> ch)
+	{
+		for (char CH : ch)
+			DATES.insert(Date(CH));
+		Empty = false;
+	};
+	inline void push(initializer_list<string> str)
+	{
+		for (string STR : str)
+			DATES.insert(Date(STR));
+		Empty = false;
+	};
+	inline void push(initializer_list<SET> SETT)
+	{
+		for (SET T : SETT)
+			DATES.insert(Date(T));
+		Empty = false;
+	};
+	inline void push(initializer_list<MSET> SETT)
+	{
+		for (MSET T : SETT)
+			DATES.insert(Date(T));
+		Empty = false;
+	};
+	inline void push(initializer_list<ordinal_pair> op)
+	{
+		for (ordinal_pair OP : op)
+			DATES.insert(Date(OP));
+		Empty = false;
+	};
+
+
+	class iterator //迭代器
+	{
+	public:
+		iterator() {};
+		iterator(MSET *i, int p) : THIS(i), pos(p) {}
+
+		~iterator() {};
+
+		bool operator!=(iterator it) //重载!=
+		{
+			return (this->pos != it.pos) || !((*this->THIS == *it.THIS));
+		}
+
+		bool operator==(iterator it) //重载==
+		{
+			return (this->pos == it.pos) && (*this->THIS == *it.THIS);
+		}
+
+		iterator operator++() //重载++
+		{
+			pos++;
+			return *this;
+		}
+
+		Date &operator*() //重载*
+		{
+			int Pos = pos;
+			multiset<Date>::iterator it = THIS->DATES.begin();
+			while (Pos--)
+			{
+				++it;
+			}
+
+			Date *temp = new Date;
+			*temp = *it;
+			return *temp;
+		}
+
+	private:
+		MSET *THIS = nullptr;
+		int pos = 0;
+		int *I = nullptr;
+		char *CH = nullptr;
+		string *STR = nullptr;
+		SET *SETT = nullptr;
+		MSET *MSETT = nullptr;
+		ordinal_pair *OP = nullptr;
+	};
+	iterator begin() { return iterator(this, 0); }		   //返回头部迭代器
+	iterator end() { return iterator(this, (int)size()); } //返回尾部迭代器
+	iterator find(const Date &S)
+	{
+		for (iterator it=begin();it!=end();++it)
+			if (*it == S)
+				return it;
+		return end();
+	}
+
+	size_t size() { return DATES.size(); };
+
+	bool operator==(const MSET &S);						   //重载==
+	void operator=(const MSET &S);						   //重载赋值运算
+	bool operator<(const MSET &S) const;				   //重载<
+
+	friend ostream &operator<<(ostream &os, MSET &S);
+
+	friend struct hash<Date>;
+	friend struct hash<SET>;
+	friend struct hash<MSET>;
+	friend struct hash<ordinal_pair>;
+private:
+	multiset<Date> DATES;
+	bool Empty;
+};
+
+/****************hash完整声明***************************************************************************************************************/
 template<>
 struct hash<Date>
 {
@@ -379,7 +586,14 @@ public:
 	size_t operator()(const SET &SETT)const;
 };
 
-/************************序偶函数定义****************************/
+template<>
+struct hash<MSET>
+{
+public:
+	size_t operator()(const MSET &SETT)const;
+};
+
+/************************序偶函数定义*******************************************************************************************************/
 
 void ordinal_pair::operator=(const ordinal_pair &op)
 {
@@ -393,7 +607,6 @@ ordinal_pair::ordinal_pair(T1 t1, T2 t2)
 	date[0] = t1;
 	date[1] = t2;
 }
-
 
 //inline void ordinal_pair::component1(int t)
 //{
@@ -504,7 +717,7 @@ ordinal_pair ordinal_pair::anti()
 }
 
 
-/********************SET函数定义***********************/
+/********************SET函数定义**********************************************************************************************************/
 SET::SET(const SET &S)
 {
 	Empty = S.Empty;
@@ -562,6 +775,19 @@ SET SET::operator-(const SET &S)
 
 	// TODO: 在此处插入 return 语句
 }
+
+void SET::push(MSET Set)
+{
+	Date *temp = new Date(Set);
+	DATES.insert(*temp);
+	Empty = false;
+};
+inline void SET::push(initializer_list<MSET> SETT)
+{
+	for (MSET T : SETT)
+		DATES.insert(Date(T));
+	Empty = false;
+};
 
 SET Symmetrical_difference(const SET &S1, const SET &S2)
 {
@@ -708,14 +934,56 @@ inline bool SET::operator<(const SET &S) const
 	return hash<SET>()(*this) < hash<SET>()(S); 
 }
 
+/*****************MSET函数定义***************************************************************************************************************/
 
-/*****************Date函数定义******************/
+bool MSET::operator==(const MSET & S)
+{
+	if (Empty == S.Empty && DATES.size() == S.DATES.size())
+	{
+		for (Date date : DATES)
+			if (S.DATES.find(date) == S.DATES.end())
+				return false;
+		for (Date date : S.DATES)
+			if (DATES.find(date) == DATES.end())
+				return false;
+		return true;
+	}
+	else
+		return false;
+}
+
+inline void MSET::operator=(const MSET &S)
+{
+	Empty = S.Empty;
+	for (Date d : S.DATES)
+		this->DATES.insert(d);
+}
+
+inline bool MSET::operator<(const MSET & S) const
+{
+	return hash<MSET>()(*this) < hash<MSET>()(S);
+}
+
+inline ostream & operator<<(ostream & os, MSET & S)
+{
+	os << '{';
+	for (Date d : S.DATES)
+		os << d << ',';
+	if(S.Empty)
+		os << "Empty_set";
+	os << "\b" << '}';
+	return os;
+	// TODO: 在此处插入 return 语句
+}
+
+/*****************Date函数定义****************************************************************************************************************/
 
 
 Date::Date(const char *chs)
 {
 	_ty = Str;
 	_SETT = NULL;
+	_MSETT = NULL;
 	_OP = NULL;
 	_STR = chs;
 }
@@ -724,6 +992,7 @@ Date::Date(const int &t)
 	_ty = Int;
 	_I = t;
 	_SETT = NULL;
+	_MSETT = NULL;
 	_OP = NULL;
 }
 Date::Date(const char &t)
@@ -731,6 +1000,7 @@ Date::Date(const char &t)
 	_ty = Char;
 	_CH = t;
 	_SETT = NULL;
+	_MSETT = NULL;
 	_OP = NULL;
 }
 Date::Date(const string &t)
@@ -738,6 +1008,7 @@ Date::Date(const string &t)
 	_ty = Str;
 	_STR = t;
 	_SETT = NULL;
+	_MSETT = NULL;
 	_OP = NULL;
 }
 Date::Date(const SET &t)
@@ -745,12 +1016,22 @@ Date::Date(const SET &t)
 	_ty = Set;
 	_SETT = new SET;
 	*_SETT = t;
+	_MSETT = NULL;
+	_OP = NULL;
+}
+Date::Date(const MSET &t)
+{
+	_ty = MSet;
+	_SETT = NULL;
+	_MSETT = new MSET;
+	*_MSETT = t;
 	_OP = NULL;
 }
 Date::Date(const ordinal_pair &t)
 {
 	_ty = Ordinal_pair;
 	_SETT = NULL;
+	_MSETT = NULL;
 	_OP = new ordinal_pair;
 	*_OP = t;
 }
@@ -762,6 +1043,10 @@ inline SET Date::SETT()
 inline ordinal_pair Date::OP()
 {
 	return *_OP;
+}
+inline MSET Date::MSETT()
+{
+	return *_MSETT;
 }
 
 int Date::operator%(const Date &date)
@@ -781,6 +1066,11 @@ void Date::operator=(const char *t)
 			delete _SETT;
 		_SETT = NULL;
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
 	case Ordinal_pair:
 		if (_OP != NULL)
 			delete _OP;
@@ -799,11 +1089,18 @@ void Date::operator=(const int &t)
 	switch (_ty)
 	{
 	case Set:
-		delete _SETT;
+		if (_SETT != NULL)
+			delete _SETT;
 		_SETT = NULL;
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
 	case Ordinal_pair:
-		delete _OP;
+		if (_OP != NULL)
+			delete _OP;
 		_OP = NULL;
 		break;
 	case null:
@@ -819,11 +1116,18 @@ void Date::operator=(const char &t)
 	switch (_ty)
 	{
 	case Set:
-		delete _SETT;
+		if (_SETT != NULL)
+			delete _SETT;
 		_SETT = NULL;
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
 	case Ordinal_pair:
-		delete _OP;
+		if (_OP != NULL)
+			delete _OP;
 		_OP = NULL;
 		break;
 	case null:
@@ -839,11 +1143,18 @@ void Date::operator=(const string &t)
 	switch (_ty)
 	{
 	case Set:
-		delete _SETT;
+		if (_SETT != NULL)
+			delete _SETT;
 		_SETT = NULL;
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
 	case Ordinal_pair:
-		delete _OP;
+		if (_OP != NULL)
+			delete _OP;
 		_OP = NULL;
 		break;
 	case null:
@@ -859,11 +1170,18 @@ void Date::operator=(const SET &t)
 	switch (_ty)
 	{
 	case Set:
-		delete _SETT;
+		if (_SETT != NULL)
+			delete _SETT;
 		_SETT = NULL;
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
 	case Ordinal_pair:
-		delete _OP;
+		if (_OP != NULL)
+			delete _OP;
 		_OP = NULL;
 		break;
 	case null:
@@ -875,16 +1193,51 @@ void Date::operator=(const SET &t)
 	_SETT = new SET;
 	*_SETT = t;
 }
+void Date::operator=(const MSET & t)
+{
+	switch (_ty)
+	{
+	case Set:
+		if (_SETT != NULL)
+			delete _SETT;
+		_SETT = NULL;
+		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
+	case Ordinal_pair:
+		if (_OP != NULL)
+			delete _OP;
+		_OP = NULL;
+		break;
+	case null:
+		break;
+	default:
+		break;
+	}
+	_ty = MSet;
+	_MSETT = new MSET;
+	*_MSETT = t;
+}
 void Date::operator=(const ordinal_pair &t)
 {
 	switch (_ty)
 	{
 	case Set:
-		delete _SETT;
+		if (_SETT != NULL)
+			delete _SETT;
 		_SETT = NULL;
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			delete _MSETT;
+		_MSETT = NULL;
+		break;
 	case Ordinal_pair:
-		delete _OP;
+		if (_OP != NULL)
+			delete _OP;
 		_OP = NULL;
 		break;
 	case null:
@@ -913,6 +1266,9 @@ ostream & operator<<(ostream & os, Date & date)
 	case Set:
 		os << *date._SETT;
 		break;
+	case MSet:
+		os << *date._MSETT;
+		break;
 	case Ordinal_pair:
 		os << *date._OP;
 		break;
@@ -927,6 +1283,28 @@ ostream & operator<<(ostream & os, Date & date)
 
 inline istream & operator>>(istream & is, Date & date)
 {
+	switch (date._ty)
+	{
+	case Set:
+		if (date._SETT != NULL)
+			delete date._SETT;
+		date._SETT = NULL;
+		break;
+	case MSet:
+		if (date._MSETT != NULL)
+			delete date._MSETT;
+		date._MSETT = NULL;
+		break;
+	case Ordinal_pair:
+		if (date._OP != NULL)
+			delete date._OP;
+		date._OP = NULL;
+		break;
+	case null:
+		break;
+	default:
+		break;
+	}
 	int i;
 	is >> i;
 	switch (types(i))
@@ -992,15 +1370,14 @@ Date::~Date()
 	{
 	case Set:
 		if(_SETT!=NULL)
-		{
 			_SETT = NULL;
-		}
 		break;
+	case MSet:
+		if (_MSETT != NULL)
+			_MSETT = NULL;
 	case Ordinal_pair:
 		if (_OP != NULL)
-		{
 			_OP = NULL;
-		}
 		break;
 	case null:
 		break;
@@ -1027,6 +1404,9 @@ bool Date::operator==(const Date &date)
 		case Set:
 			return *_SETT == *date._SETT;
 			break;
+		case MSet:
+			return *_MSETT == *date._MSETT;
+			break;
 		case Ordinal_pair:
 			return *_OP == *date._OP;
 			break;
@@ -1047,7 +1427,7 @@ bool Date::operator<(const Date &date) const
 }
 
 
-
+/***************hash函数定义*******************************************************************************************************************/
 
 size_t hash<Date>::operator()(const Date &date) const
 {
@@ -1098,4 +1478,16 @@ size_t hash<SET>::operator()(const SET &SETT)const
 		h = hash<size_t>()(h ^ (hash<Date>()(t) << 2));
 	h += SETT.Empty;
 	return h;
+}
+
+inline size_t hash<MSET>::operator()(const MSET & SETT) const
+{
+	if (SETT.DATES.size() == 0)
+		return 1;
+	size_t h = hash<Date>()(*SETT.DATES.begin());
+	for (Date t : SETT.DATES)
+		h = hash<size_t>()(h ^ (hash<Date>()(t) << 2));
+	h += SETT.Empty;
+	return h;
+	return size_t();
 }
