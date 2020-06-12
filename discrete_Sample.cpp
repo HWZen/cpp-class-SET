@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include <set>
+#include "discrete_SET.h"
 #include "discrete_Binary_relationship.h"
 #include "discrete_Graphs.h"
 using namespace std;
@@ -20,7 +21,7 @@ int main()
 	ifstream input3;
 	ifstream input4;
 	ifstream input5;
-#if 0
+#if 1
 	input1.open("input1");
 	input2.open("input2");
 
@@ -87,7 +88,7 @@ int main()
 
 	std::cout << std::endl << std::endl;
 
-#if 0
+#if 1
 	input1.open("input1.txt");
 	input2.open("input2.txt");
 	input3.open("input3.txt");
@@ -224,8 +225,6 @@ int main()
 			MSET t2({ t1 });
 			input2 >> t1;
 			t2.push(t1);
-			Date t3(t2);
-			std::cout << t3 << endl;
 			MS1.push(t2);
 		}
 		std::cout << "MS1: " << MS1 << endl;
@@ -235,17 +234,19 @@ int main()
 		std::cout << "g2.txt open fail!" << endl;
 	
 
-	//Graphs G1(SET13, MS1);
-	//std::cout <<"G1: "<<G1<<endl
-	//	<< "E_size: " << G1.E_size() << endl
-	//	<< "V_size: " << G1.V_size() << endl
-	//	<< "EG_empty? " << G1.EG_empty() << endl
-	//	<< "Figure_empty? " << G1.Figure_empty() << endl
-	//	<< "Associations: " << Graphs::Associations(Date(1), MSET({ 1,1 })) << endl
-	//	<< "V_Adjacent? " << G1.V_Adjacent(Date(1), Date(4)) << endl
-	//	<< "E_Adjacent? " << Graphs::E_Adjacent(MSET({ 1,2 }), MSET({ 2,3 })) << endl
-	//	<< "E_Adjacent? " << Graphs::E_Adjacent(ordinal_pair(1, 2), ordinal_pair(3, 2)) << endl
-	//	<< "link_branch: " << G1.link_branch();
+	Graphs G1(6, MS1);
+	std::cout << "G1: " << endl;
+	G1.print();
+	std::cout << std::endl;
+	std::cout << "E_size: " << G1.E_size() << endl
+		<< "V_size: " << G1.V_size() << endl
+		<< "EG_empty? " << G1.EG_empty() << endl
+		<< "Figure_empty? " << G1.Figure_empty() << endl
+		<< "Associations: " << Graphs::Associations(Date(1), MSET({ 1,1 })) << endl
+		<< "V_Adjacent? " << G1.V_Adjacent(1, 4) << endl
+		<< "E_Adjacent? " << Graphs::E_Adjacent(MSET({ 1,2 }), MSET({ 2,3 })) << endl
+		<< "E_Adjacent? " << Graphs::E_Adjacent(ordinal_pair(1, 2), ordinal_pair(3, 2)) << endl
+		<< "link_branch: " << G1.link_branch();
 
 #endif
 

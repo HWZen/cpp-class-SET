@@ -51,6 +51,7 @@ public:
 	{
 		_ty = null;
 		_SETT = NULL;
+		_MSETT = NULL;
 		_OP = NULL;
 	}
 	Date(const Date &date);
@@ -955,8 +956,7 @@ bool MSET::operator==(const MSET & S)
 inline void MSET::operator=(const MSET &S)
 {
 	Empty = S.Empty;
-	for (Date d : S.DATES)
-		this->DATES.insert(d);
+	DATES = S.DATES;
 }
 
 inline bool MSET::operator<(const MSET & S) const
@@ -1337,6 +1337,7 @@ Date::Date(const Date &date)
 {
 	_ty = date._ty;
 	_SETT = NULL;
+	_MSETT = NULL;
 	_OP = NULL;
 	switch (_ty)
 	{
@@ -1352,6 +1353,10 @@ Date::Date(const Date &date)
 	case Set:
 		_SETT = new SET;
 		*_SETT = *date._SETT;
+		break;
+	case MSet:
+		_MSETT = new MSET;
+		*_MSETT = *date._MSETT;
 		break;
 	case Ordinal_pair:
 		_OP = date._OP;
@@ -1375,6 +1380,7 @@ Date::~Date()
 	case MSet:
 		if (_MSETT != NULL)
 			_MSETT = NULL;
+		break;
 	case Ordinal_pair:
 		if (_OP != NULL)
 			_OP = NULL;

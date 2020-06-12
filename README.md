@@ -1,19 +1,21 @@
 cpp-class-SET
 =============
 ### A class named SET can storage of data mixed<br>
-* 包含两个类：'SET'（集合）、'ordinal_pair'（序偶）<br>
-* 支持的数据类型：`int`,`char`,`string`,`SET`,ordinal_pair`<br>
-* 支持不同类型数据混合储存<br>
-* 支持的运算：交（`&&`）、并（`+`）、差（`-`）、对称差（`Symmetrical_difference(SET 1,SET2)`）、幂集（`SET.power()`）、笛卡尔积（`*` ）<br>
+#### Now this project is going to expand to the entire discrete
+* 包含四个个类：'SET'（集合）、'ordinal_pair'（序偶）、`Date`（储存数据）、`MSET`（多重集）<br>
+* 项目已有的扩展：二元关系、图<br>
+* 支持的数据类型：`int`,`char`,`string`,`SET`,`MSET`,`ordinal_pair`<br>
+* `Date`支持不同类型数据混合储存<br>
+* `SET`支持的运算：交（`&&`）、并（`+`）、差（`-`）、对称差（`Symmetrical_difference(SET 1,SET2)`）、幂集（`SET.power()`）、笛卡尔积（`*` ）<br>
 * 支持输出流`<<`操作，可直接将结果用`cout`输出<br>
 
 >Contains two categories: SET (set), ordinal_pair (order couple)<br>
->Supported data types: int, char, string, SET, ordinal_pair<br>
->Support mixed storage of different types of data<br>
->Supported operations: intersection (&&), union (+), difference (-), symmetric difference (Symmetrical_difference (SET 1, SET2)), power set (SET.power ()), Cartesian product (* )<br>
+>Supported data types: int, char, string, SET, MSET,ordinal_pair<br>
+>Date Support mixed storage of different types of data<br>
+>SET Supported operations: intersection (&&), union (+), difference (-), symmetric difference (Symmetrical_difference (SET 1, SET2)), power set (SET.power ()), Cartesian product (* )<br>
 >Support output stream << operation, you can directly output the result with cout<br>
 
-下面列出示例代码
+下面列出SET示例代码
 ```C++
     SET SET0 = {};//定义一个空集集合
     //{Empty_set}
@@ -126,7 +128,40 @@ input.close()
 * 新建类`Date`，封装`int`,`char`,`string`,`class SET`,`class ordinal_pair`五种数据类型。
 * 减少指针的使用，防止出错。
 * 数据的构造、析构转移给`Date`，减少其他类的代码量。
-* 使用纯真hash运算，数据识别更精确
+* 使用纯正hash运算，数据识别更精确
 
+## 6月13日
+### 图类基础功能完成
+> 在B站朋友：第0奇异点【[他的github](https://github.com/Binary-Song)】的建议下，我决定用邻接矩阵来作为图的数据结构，确实是简洁明了了很多。
+> 甚至他还帮我写了一份Matrix矩阵类和Graph图类。真的是万分感谢！
+
+### 截至6月13日图类完成的功能有：
+* `static Graphs G(size_t v, MSET S2);`							//构建并返回无向图
+* `static Graphs E(size_t v, MSET S2);`							//构建并返回有向图
+* `size_t V_size() { return V_num; };`							//顶点数量(n阶图)
+* `size_t E_size();`											//边数量
+* `bool EG_empty();`											//判断零图
+* `bool Figure_empty() { return V_num == 0; };`					//判断空图
+* `static unsigned int Associations(Date d, MSET S);`			//关联次数
+* `bool V_Adjacent(size_t d1, size_t d2);`						//判断顶点是否相邻
+* `static bool E_Adjacent(MSET S1, MSET S2);`					//判断无向边是否相邻
+* `static bool E_Adjacent(ordinal_pair op1, ordinal_pair op2);` //判断有向图是否相邻
+* `unsigned int link_branch();`									//连通分量
+* `void print();`												//打印邻接矩阵
+
+> 更新后记
+这次更新其实工程量比想象的大。
+一开始我是边看PPT边写图的，以至于我以为图和二元关系一样，是在集合基础上的扩展。
+于是在数据上我继承了集合SET的多样性，还在SET.h里添加了一个MSET多重集类。
+结果遇到了很多麻烦，尤其为了添加了MSET，基本整个SET.h都改了，还是疯狂StackOverFlow。
+当然，这些麻烦并非不可解决，但这真的非常麻烦。
+后来在B站网友的点提下，我意识到在图的概念里，对数据的多样性并没有什么需求。没有需求说要为顶点起个优雅的名字，储存边也没有必要给SET套娃套好几层（两层足矣）
+于是我决定重构快完成的代码，顶点全部用int，边用MSET传进来后马上转换成邻接矩阵。（以后肯定会支持直接用邻接矩阵构造）
+在决定这样做以后，我只用一个晚上就实现了图的基本概念。实属便捷
+我从中获得的教训：
+>> 代码要追求简洁而不是功能强大，越简洁的代码约稳定，越复杂的代码越难维护，尤其是项目只有你一个人在写的时候
+如果写出了复杂而功能强大的代码，不要留恋。将它放在头文件里，需要的时候调用就好，不要想着再为它添砖加瓦，工程量巨大。
+
+> 最后，再次感谢第0奇异点，感谢他提点我用邻接矩阵，感谢他为我写了一份矩阵类和图类，感谢他教会我用void类型的指针！
 
 [My blog](https://hwzen.myds.me:17001 "变态文春の又一个博客")
