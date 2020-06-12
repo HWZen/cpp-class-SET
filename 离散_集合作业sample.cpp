@@ -14,10 +14,14 @@ using namespace std;
 
 int main()
 {
-
+	ifstream input1;
+	ifstream input2;
+	ifstream input3;
+	ifstream input4;
+	ifstream input5;
 #if 1
-	ifstream input11("input1");
-	ifstream input22("input2");
+	input1.open("input1");
+	input2.open("input2");
 
 	SET SET0 = {};
 	cout << "SET0:" << SET0 << endl;
@@ -80,12 +84,15 @@ int main()
 		cout << T << " ";
 #endif // 集合演示
 
+	std::cout << std::endl << std::endl;
+
 #if 1
-	ifstream input1("input1.txt");
-	ifstream input2("input2.txt");
-	ifstream input3("input3.txt");
-	ifstream input4("input4.txt");
-	ifstream input5("input5.txt");
+	input1.open("input1.txt");
+	input2.open("input2.txt");
+	input3.open("input3.txt");
+	input4.open("input4.txt");
+	input5.open("input5.txt");
+	
 
 	SET S1;
 	SET S2;
@@ -193,11 +200,60 @@ int main()
 
 #endif // 二元关系演示
 
-	//ordinal_pair op1(12, string("Helllo,world!"));
-	//SET T;
-	//T.push(Date(op1));
-	//std::cout << op1 << endl;
-	//std::cout << T << endl;
+#if 0
+	input1.open("g1.txt");
+	input2.open("g2.txt");
+	SET SET13;
+	if (input1)
+	{
+		input1 >> SET13;
+		std::cout << "SET13: " << SET13 << endl;
+		input1.close();
+	}
+	else
+		std::cout << "g1.txt open fail!" << endl;
+
+	MSET MS1;
+	Date t1;
+	if (input2)
+	{
+		while (input2 >> t1)
+		{
+			MSET t2({ t1 });
+			input2 >> t1;
+			t2.push(t1);
+			MS1.push(t2);
+		}
+		std::cout << "MS1: " << MS1 << endl;
+		input2.close();
+	}
+	else
+		std::cout << "g2.txt open fail!" << endl;
+	
+
+	Graphs G1(SET13, MS1);
+	std::cout << "G1: " << G1 << endl;
+	std::cout << "E_size: " << G1.E_size() << endl;
+	std::cout << "V_size: " << G1.V_size() << endl;
+	std::cout << "EG_empty? " << G1.EG_empty() << endl;
+	std::cout << "Figure_empty? " << G1.Figure_empty() << endl;
+	std::cout << "Associations: " << Graphs::Associations(Date(1), MSET({ 1,1 })) << endl;
+	std::cout << "V_Adjacent? " << G1.V_Adjacent(Date(1), Date(4)) << endl;
+	std::cout << "E_Adjacent? " << Graphs::E_Adjacent(MSET({ 1,2 }), MSET({ 2,3 })) << endl;
+	std::cout << "E_Adjacent? " << Graphs::E_Adjacent(ordinal_pair(1, 2), ordinal_pair(3, 2)) << endl;
+	std::cout << "link_branch: " << G1.link_branch();;
+
+#endif
+
+	//void *T;
+	//T = (void*)new SET;
+	//*(SET*)T = {1,2};
+	//std::cout << *(SET*)T << std::endl;
+
+	//delete T;
+	//T = (void*)new int;
+	//*(int*)T = 10;
+	//std::cout << *(int*)T;
 	
 	return 0;
 }
